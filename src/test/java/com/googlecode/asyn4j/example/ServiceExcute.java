@@ -24,7 +24,7 @@ public class ServiceExcute {
 
 	@Before
 	public void setUp() {
-		context = new FileSystemXmlApplicationContext("D:/java/anyc/src/main/java/applicationContext.xml");
+		context = new FileSystemXmlApplicationContext("D:/asyn4j/src/main/java/applicationContext.xml");
 
 	}
 
@@ -40,12 +40,12 @@ public class ServiceExcute {
 	@Test
 	
 	public void testExecut2() throws InterruptedException {
-		ExecutorService executor = Executors.newFixedThreadPool(100);
-		AsynService anycService = new AsynServiceImpl(executor,3000,200L);
+		ExecutorService executor = Executors.newFixedThreadPool(2);
+		AsynService anycService = new AsynServiceImpl(executor,500,200L);
 		for(long i=0;i<Long.MAX_VALUE;i++){
 			anycService.addWork(new Object[] { "panxiuyan"+i }, TestBean.class,
 					"myName", new MyResult());
-			if(i%99999==0){
+			if(i%99==0){
 				System.out.println(anycService.getRunStatInfo());
 			}
 		}

@@ -47,9 +47,7 @@ public class AsynServiceImpl implements AsynService {
 
 	private static boolean run = false;
 
-	
-
-	private static BlockingQueue<Future<AsynResult>> resultBlockingQueue = null;
+	private static BlockingQueue<AsynResult> resultBlockingQueue = null;
 
 	private static Map<String, Integer> statMap = new HashMap<String, Integer>(
 			3);
@@ -68,8 +66,8 @@ public class AsynServiceImpl implements AsynService {
 		init(null, workQueueLength, addWorkWaitTime);
 	}
 
-	public AsynServiceImpl(ExecutorService executorservice, int workQueueLength,
-			long addWorkWaitTime) {
+	public AsynServiceImpl(ExecutorService executorservice,
+			int workQueueLength, long addWorkWaitTime) {
 		init(executorservice, workQueueLength, addWorkWaitTime);
 	}
 
@@ -81,7 +79,7 @@ public class AsynServiceImpl implements AsynService {
 
 		if (!run) {
 			if (executor == null) {
-				 executor = Executors.newCachedThreadPool();
+				executor = Executors.newCachedThreadPool();
 			}
 
 			// init work execute server
@@ -89,19 +87,16 @@ public class AsynServiceImpl implements AsynService {
 					workQueueLength, addWorkWaitTime);
 
 			// init work execute queue
-			resultBlockingQueue = new LinkedBlockingQueue<Future<AsynResult>>(
+			resultBlockingQueue = new LinkedBlockingQueue<AsynResult>(
 					workQueueLength);
-
-			
 
 			// start work thread
 			asynWorkExecute = new AsynWorkExecute(anycWorkCachedService,
-					executorservice,resultBlockingQueue);
+					executorservice, resultBlockingQueue);
 			executor.execute(asynWorkExecute);
 
 			// start callback thread
-			asynResultCacheService = new AsynResultCachedServiceImpl(
-					resultBlockingQueue, executor);
+			asynResultCacheService = new AsynResultCachedServiceImpl(resultBlockingQueue);
 			executor.execute(asynResultCacheService);
 			run = true;
 		}
@@ -195,12 +190,13 @@ public class AsynServiceImpl implements AsynService {
 	public String getRunStatInfo() {
 		if (run) {
 			infoSb.delete(0, infoSb.length());
-			infoSb.append("total asyn work:").append(
-					anycWorkCachedService.getTotalWork()).append("\t");
-			infoSb.append(",excute asyn work:").append(
-					asynWorkExecute.getExecuteWork()).append("\t");
-			infoSb.append(",callback asyn result:").append(
-					asynResultCacheService.getResultBack()).append("\t");
+			infoSb.append("total asyn work:")
+					.append(anycWorkCachedService.getTotalWork()).append("\t");
+			infoSb.append(",excute asyn work:")
+					.append(asynWorkExecute.getExecuteWork()).append("\t");
+			infoSb.append(",callback asyn result:")
+					.append(asynResultCacheService.getResultBack())
+					.append("\t");
 		}
 		return infoSb.toString();
 	}

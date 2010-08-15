@@ -23,5 +23,11 @@ public interface AsynWork extends Callable<AsynResult> {
 	 * @return
 	 */
 	public AsynResult getAnycResult();
+	
+	/**
+	 * get this thread work name
+	 * @return
+	 */
+    public String getThreadName();
 
 }
