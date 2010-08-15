@@ -19,9 +19,8 @@ public class AsynWorkExecute implements Runnable {
 
 	private AsynWorkCachedService anycWorkCachedService = null;
 
-	private BlockingQueue<Future<AsynResult>> resultBlockingQueue = null;
+	private BlockingQueue<AsynResult> resultBlockingQueue = null;
 
-	private CompletionService<AsynResult> completionService = null;
 
 	private ExecutorService executorservice = null;
 
@@ -30,29 +29,20 @@ public class AsynWorkExecute implements Runnable {
 
 	public AsynWorkExecute(AsynWorkCachedService anycWorkCachedService,
 			ExecutorService executorservice,
-			BlockingQueue<Future<AsynResult>> resultBlockingQueue) {
+			BlockingQueue<AsynResult> resultBlockingQueue) {
 		this.anycWorkCachedService = anycWorkCachedService;
 		this.executorservice = executorservice;
-		// init work execute threadfactory
-		completionService = new ExecutorCompletionService(executorservice,
-				resultBlockingQueue);
-
+		this.resultBlockingQueue = resultBlockingQueue;
 	}
 
 	@Override
 	public void run() {
-		if (completionService == null)
-			throw new IllegalArgumentException("completionService is null");
 		while (true) {
 			try {
 				// get work form work queue
 				AsynWork anycWork = anycWorkCachedService.getWork();
 				// execute anyc work
-				if (anycWork.getAnycResult() != null) {// have callback
-					completionService.submit(anycWork);
-				} else {
-					executorservice.submit(anycWork);
-				}
+			    executorservice.execute(new WorkProcessor(anycWork,anycWork.getThreadName(),resultBlockingQueue));
 				++executeWork;
 			} catch (Exception e) {
 				log.error(e);

@@ -76,4 +76,19 @@ public class AsynWorkEntity implements AsynWork, Comparable<AsynWorkEntity> {
 		return o.getWeight() - this.weight;
 	}
 
+	@Override
+	public String getThreadName() {
+		String className =this.target.getClass().getSimpleName();
+		StringBuilder sb = new StringBuilder();
+		sb.append(className).append("/").append(this.method).append("/");
+		if(this.params!=null){
+			sb.append(params.length);
+		}else{
+			sb.append(0);
+		}
+		return sb.toString();
+	}
+	
+	
+
 }
