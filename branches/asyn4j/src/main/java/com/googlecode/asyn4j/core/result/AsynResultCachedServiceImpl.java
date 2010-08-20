@@ -3,6 +3,7 @@ package com.googlecode.asyn4j.core.result;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -18,7 +19,7 @@ public class AsynResultCachedServiceImpl implements AsynResultCacheService,
 	private static final Log log = LogFactory
 			.getLog(AsynWorkCachedServiceImpl.class);
 
-	private static  Executor executor = Executors.newFixedThreadPool(2);
+	private   ExecutorService executor = null;
 
 	private BlockingQueue<AsynResult> anycResultQueue = null;
 
@@ -26,8 +27,9 @@ public class AsynResultCachedServiceImpl implements AsynResultCacheService,
 	private static int resultBack = 0;
 
 	public AsynResultCachedServiceImpl(
-			BlockingQueue<AsynResult> anycResultQueue) {
+			BlockingQueue<AsynResult> anycResultQueue,ExecutorService executor) {
 		this.anycResultQueue = anycResultQueue;
+		this.executor = executor;
 	}
 
 	@Override

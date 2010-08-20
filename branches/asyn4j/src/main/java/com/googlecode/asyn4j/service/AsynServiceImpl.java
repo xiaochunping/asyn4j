@@ -43,7 +43,9 @@ public class AsynServiceImpl implements AsynService {
 	private final static int CPU_NUMBER = Runtime.getRuntime()
 			.availableProcessors();
 
-	private static Executor executor = null;
+	private static ExecutorService workExecutor = null;
+
+	private static ExecutorService callBackExecutor = null;
 
 	private static boolean run = false;
 
@@ -58,29 +60,26 @@ public class AsynServiceImpl implements AsynService {
 
 	private AsynResultCachedServiceImpl asynResultCacheService = null;
 
-	public AsynServiceImpl(ExecutorService executorservice) {
-		init(executorservice, workQueueLength, addWorkWaitTime);
-	}
-
 	public AsynServiceImpl() {
-		init(null, workQueueLength, addWorkWaitTime);
+		this(workQueueLength, addWorkWaitTime, ((CPU_NUMBER) / 2)+1,
+				(CPU_NUMBER) / 2);
 	}
 
-	public AsynServiceImpl(ExecutorService executorservice,
-			int workQueueLength, long addWorkWaitTime) {
-		init(executorservice, workQueueLength, addWorkWaitTime);
+	public AsynServiceImpl(int workQueueLength, long addWorkWaitTime,
+			int workThreadNum, int callBackThreadNum) {
+		init(workQueueLength, addWorkWaitTime, workThreadNum, callBackThreadNum);
 	}
 
 	/**
 	 * init Asyn Service
 	 */
-	private void init(ExecutorService executorservice, int workQueueLength,
-			long addWorkWaitTime) {
+	private void init(int workQueueLength, long addWorkWaitTime,
+			int workThreadNum, int callBackThreadNum) {
 
 		if (!run) {
-			if (executor == null) {
-				executor = Executors.newCachedThreadPool();
-			}
+			workExecutor = Executors.newFixedThreadPool(workThreadNum);
+
+			callBackExecutor = Executors.newFixedThreadPool(callBackThreadNum);
 
 			// init work execute server
 			anycWorkCachedService = new AsynWorkCachedServiceImpl(
@@ -92,12 +91,16 @@ public class AsynServiceImpl implements AsynService {
 
 			// start work thread
 			asynWorkExecute = new AsynWorkExecute(anycWorkCachedService,
-					executorservice, resultBlockingQueue);
-			executor.execute(asynWorkExecute);
+					workExecutor, resultBlockingQueue);
+			new Thread(asynWorkExecute).start();
 
 			// start callback thread
-			asynResultCacheService = new AsynResultCachedServiceImpl(resultBlockingQueue);
-			executor.execute(asynResultCacheService);
+			asynResultCacheService = new AsynResultCachedServiceImpl(
+					resultBlockingQueue, callBackExecutor);
+			callBackExecutor.execute(asynResultCacheService);
+			
+			new Thread(asynResultCacheService).start();
+			
 			run = true;
 		}
 
@@ -123,7 +126,7 @@ public class AsynServiceImpl implements AsynService {
 	public void addWork(Object[] params, Class clzss, String method,
 			AsynResult anycResult, int weight) {
 		Object target = null;
-
+        
 		try {
 			Constructor constructor = clzss.getConstructor();
 			if (constructor == null) {
@@ -190,13 +193,12 @@ public class AsynServiceImpl implements AsynService {
 	public String getRunStatInfo() {
 		if (run) {
 			infoSb.delete(0, infoSb.length());
-			infoSb.append("total asyn work:")
-					.append(anycWorkCachedService.getTotalWork()).append("\t");
-			infoSb.append(",excute asyn work:")
-					.append(asynWorkExecute.getExecuteWork()).append("\t");
-			infoSb.append(",callback asyn result:")
-					.append(asynResultCacheService.getResultBack())
-					.append("\t");
+			infoSb.append("total asyn work:").append(
+					anycWorkCachedService.getTotalWork()).append("\t");
+			infoSb.append(",excute asyn work:").append(
+					asynWorkExecute.getExecuteWork()).append("\t");
+			infoSb.append(",callback asyn result:").append(
+					asynResultCacheService.getResultBack()).append("\t");
 		}
 		return infoSb.toString();
 	}
