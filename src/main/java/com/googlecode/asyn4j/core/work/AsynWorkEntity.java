@@ -61,7 +61,9 @@ public class AsynWorkEntity implements AsynWork, Comparable<AsynWorkEntity> {
 		}
 
 		Object result = targetMethod.invoke(target, params);
-		anycResult.setInokeResult(result);
+		if(anycResult!=null){//if call back is not null
+			anycResult.setInokeResult(result);
+		}
 		return anycResult;
 
 	}

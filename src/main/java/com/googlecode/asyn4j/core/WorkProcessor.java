@@ -32,7 +32,8 @@ public class WorkProcessor implements Runnable {
 		}
 		try {
 			AsynResult result = asynWork.call();
-			resultQueue.offer(result, 2000, TimeUnit.MILLISECONDS);
+			if (result != null)
+				resultQueue.offer(result, 2000, TimeUnit.MILLISECONDS);
 		} catch (Exception e) {
 			log.error(e);
 		}
@@ -41,6 +42,7 @@ public class WorkProcessor implements Runnable {
 
 	/**
 	 * set thread name
+	 * 
 	 * @param thread
 	 * @param name
 	 */

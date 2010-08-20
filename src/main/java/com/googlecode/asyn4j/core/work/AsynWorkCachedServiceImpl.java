@@ -44,6 +44,9 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 			// if work queue full,wait time
 			boolean addFlag = workQueue.offer(anycWork, addWorkWaitTime,
 					TimeUnit.MILLISECONDS);
+			if(!addFlag){
+				log.warn("work add fail");
+			}
 			++totalWork;
 		} catch (InterruptedException e) {
 			log.error(e);
