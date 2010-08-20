@@ -40,8 +40,8 @@ public class ServiceExcute {
 	@Test
 	
 	public void testExecut2() throws InterruptedException {
-		AsynService anycService = new AsynServiceImpl(300,200L,1,2);
-		for(long i=0;i<Long.MAX_VALUE;i++){
+		AsynService anycService = new AsynServiceImpl();
+		for(long i=0;i<Integer.MAX_VALUE;i++){
 			anycService.addWorkWithSpring(new Object[] { "panxiuyan"+i }, "testBean",
 					"myName", new MyResult());
 			if(i%99==0){

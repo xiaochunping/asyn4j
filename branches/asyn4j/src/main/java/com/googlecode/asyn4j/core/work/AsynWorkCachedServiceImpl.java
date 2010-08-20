@@ -1,6 +1,5 @@
 package com.googlecode.asyn4j.core.work;
 
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +18,8 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 	protected static BlockingQueue<AsynWork> workQueue = null;
 
 	private long addWorkWaitTime = 0;
+	
+	private int maxCacheWork = 0;
 
 	// total asyn work total
 	private static int totalWork = 0;
@@ -27,7 +28,7 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 		workQueue = new PriorityBlockingQueue<AsynWork>();
 	}
 
-	public AsynWorkCachedServiceImpl(long addWorkWaitTime) {
+	public AsynWorkCachedServiceImpl(int maxCacheWork,long addWorkWaitTime) {
 		workQueue = new PriorityBlockingQueue<AsynWork>();
 		this.addWorkWaitTime = addWorkWaitTime;
 	}
@@ -44,7 +45,7 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 	@Override
 	public void addWork(AsynWork anycWork) {
 		try {
-			if(totalWork - AsynWorkExecute.getExecuteWork()>300){
+			if(totalWork - AsynWorkExecute.getExecuteWork()>maxCacheWork){
 				log.warn("work queue is full");
 				return;
 			}
