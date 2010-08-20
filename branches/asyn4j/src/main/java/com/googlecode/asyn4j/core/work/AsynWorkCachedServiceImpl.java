@@ -1,11 +1,14 @@
 package com.googlecode.asyn4j.core.work;
 
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.googlecode.asyn4j.core.AsynWorkExecute;
 
 public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 
@@ -18,14 +21,14 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 	private long addWorkWaitTime = 0;
 
 	// total asyn work total
-	private int totalWork = 0;
+	private static int totalWork = 0;
 
-	public AsynWorkCachedServiceImpl(int queueLength) {
-		workQueue = new PriorityBlockingQueue<AsynWork>(queueLength);
+	public AsynWorkCachedServiceImpl() {
+		workQueue = new PriorityBlockingQueue<AsynWork>();
 	}
 
-	public AsynWorkCachedServiceImpl(int queueLength, long addWorkWaitTime) {
-		workQueue = new PriorityBlockingQueue<AsynWork>(queueLength);
+	public AsynWorkCachedServiceImpl(long addWorkWaitTime) {
+		workQueue = new PriorityBlockingQueue<AsynWork>();
 		this.addWorkWaitTime = addWorkWaitTime;
 	}
 
@@ -41,13 +44,18 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 	@Override
 	public void addWork(AsynWork anycWork) {
 		try {
+			if(totalWork - AsynWorkExecute.getExecuteWork()>300){
+				log.warn("work queue is full");
+				return;
+			}
 			// if work queue full,wait time
 			boolean addFlag = workQueue.offer(anycWork, addWorkWaitTime,
 					TimeUnit.MILLISECONDS);
 			if(!addFlag){
 				log.warn("work add fail");
+			}else{
+				++totalWork;
 			}
-			++totalWork;
 		} catch (InterruptedException e) {
 			log.error(e);
 		}

@@ -5,6 +5,7 @@ import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,18 +15,16 @@ import com.googlecode.asyn4j.core.work.AsynWork;
 import com.googlecode.asyn4j.core.work.AsynWorkCachedService;
 
 public class AsynWorkExecute implements Runnable {
-	private static final Log log = LogFactory
-			.getLog(AsynWorkExecute.class);
+	private static final Log log = LogFactory.getLog(AsynWorkExecute.class);
 
 	private AsynWorkCachedService anycWorkCachedService = null;
 
 	private BlockingQueue<AsynResult> resultBlockingQueue = null;
 
-
 	private ExecutorService executorservice = null;
 
 	// execute asyn work number
-	private int executeWork = 0;
+	public static AtomicInteger executeWork = new AtomicInteger();;
 
 	public AsynWorkExecute(AsynWorkCachedService anycWorkCachedService,
 			ExecutorService executorservice,
@@ -42,8 +41,8 @@ public class AsynWorkExecute implements Runnable {
 				// get work form work queue
 				AsynWork anycWork = anycWorkCachedService.getWork();
 				// execute anyc work
-			    executorservice.execute(new WorkProcessor(anycWork,anycWork.getThreadName(),resultBlockingQueue));
-				++executeWork;
+				executorservice.execute(new WorkProcessor(anycWork, anycWork
+						.getThreadName(), resultBlockingQueue));
 			} catch (Exception e) {
 				log.error(e);
 			}
@@ -51,8 +50,12 @@ public class AsynWorkExecute implements Runnable {
 		}
 	}
 
-	public int getExecuteWork() {
-		return executeWork;
+	public static int getExecuteWork() {
+		return executeWork.intValue();
+	}
+
+	public static int incrementExecuteWork() {
+		return executeWork.incrementAndGet();
 	}
 
 }

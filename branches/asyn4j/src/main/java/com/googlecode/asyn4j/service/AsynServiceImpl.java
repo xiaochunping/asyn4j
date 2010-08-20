@@ -82,12 +82,10 @@ public class AsynServiceImpl implements AsynService {
 			callBackExecutor = Executors.newFixedThreadPool(callBackThreadNum);
 
 			// init work execute server
-			anycWorkCachedService = new AsynWorkCachedServiceImpl(
-					workQueueLength, addWorkWaitTime);
+			anycWorkCachedService = new AsynWorkCachedServiceImpl(addWorkWaitTime);
 
 			// init work execute queue
-			resultBlockingQueue = new LinkedBlockingQueue<AsynResult>(
-					workQueueLength);
+			resultBlockingQueue = new LinkedBlockingQueue<AsynResult>();
 
 			// start work thread
 			asynWorkExecute = new AsynWorkExecute(anycWorkCachedService,
