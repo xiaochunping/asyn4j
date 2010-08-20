@@ -36,12 +36,13 @@ public class AsynServiceImpl implements AsynService {
 	private static long addWorkWaitTime = Long.MAX_VALUE;
 
 	// default work queue length
-	private static int workQueueLength = Integer.MAX_VALUE;
+	private static int workQueueLength = 300;
 
 	private static final int DEFAULT_WORK_WEIGHT = 5;
 
 	private final static int CPU_NUMBER = Runtime.getRuntime()
 			.availableProcessors();
+	
 
 	private static ExecutorService workExecutor = null;
 
@@ -65,15 +66,15 @@ public class AsynServiceImpl implements AsynService {
 				(CPU_NUMBER) / 2);
 	}
 
-	public AsynServiceImpl(int workQueueLength, long addWorkWaitTime,
+	public AsynServiceImpl(int maxCacheWork, long addWorkWaitTime,
 			int workThreadNum, int callBackThreadNum) {
-		init(workQueueLength, addWorkWaitTime, workThreadNum, callBackThreadNum);
+		init(maxCacheWork, addWorkWaitTime, workThreadNum, callBackThreadNum);
 	}
 
 	/**
 	 * init Asyn Service
 	 */
-	private void init(int workQueueLength, long addWorkWaitTime,
+	private void init(int maxCacheWork, long addWorkWaitTime,
 			int workThreadNum, int callBackThreadNum) {
 
 		if (!run) {
@@ -82,7 +83,7 @@ public class AsynServiceImpl implements AsynService {
 			callBackExecutor = Executors.newFixedThreadPool(callBackThreadNum);
 
 			// init work execute server
-			anycWorkCachedService = new AsynWorkCachedServiceImpl(addWorkWaitTime);
+			anycWorkCachedService = new AsynWorkCachedServiceImpl(maxCacheWork,addWorkWaitTime);
 
 			// init work execute queue
 			resultBlockingQueue = new LinkedBlockingQueue<AsynResult>();
