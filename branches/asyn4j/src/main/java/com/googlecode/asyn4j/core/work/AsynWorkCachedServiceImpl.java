@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.asyn4j.core.AsynWorkExecute;
+import com.googlecode.asyn4j.core.WorkQueueFullHandler;
 
 public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 
@@ -23,12 +24,14 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 
 	// total asyn work total
 	private static int totalWork = 0;
+	
+	private WorkQueueFullHandler workQueueFullHandler;
 
 	public AsynWorkCachedServiceImpl() {
 		workQueue = new PriorityBlockingQueue<AsynWork>();
 	}
 
-	public AsynWorkCachedServiceImpl(int maxCacheWork,long addWorkWaitTime) {
+	public AsynWorkCachedServiceImpl(int maxCacheWork,long addWorkWaitTime,WorkQueueFullHandler workQueueFullHandler) {
 		workQueue = new PriorityBlockingQueue<AsynWork>();
 		this.addWorkWaitTime = addWorkWaitTime;
 	}
@@ -46,7 +49,11 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 	public void addWork(AsynWork anycWork) {
 		try {
 			if(totalWork - AsynWorkExecute.getExecuteWork()>maxCacheWork){
-				log.warn("work queue is full");
+				if(workQueueFullHandler!=null){
+					workQueueFullHandler.addAsynWork(anycWork);
+				}else{
+					log.warn("work queue is full");
+				}
 				return;
 			}
 			// if work queue full,wait time
