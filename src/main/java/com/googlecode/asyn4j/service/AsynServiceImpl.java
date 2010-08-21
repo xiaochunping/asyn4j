@@ -16,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.asyn4j.core.AsynWorkExecute;
+import com.googlecode.asyn4j.core.WorkQueueFullHandler;
 import com.googlecode.asyn4j.core.result.AsynResult;
 import com.googlecode.asyn4j.core.result.AsynResultCacheService;
 import com.googlecode.asyn4j.core.result.AsynResultCachedServiceImpl;
@@ -60,6 +61,8 @@ public class AsynServiceImpl implements AsynService {
 	private AsynWorkExecute asynWorkExecute = null;
 
 	private AsynResultCachedServiceImpl asynResultCacheService = null;
+	
+	private WorkQueueFullHandler workQueueFullHandler = null;
 
 	public AsynServiceImpl() {
 		this(workQueueLength, addWorkWaitTime, ((CPU_NUMBER) / 2)+1,
@@ -201,5 +204,16 @@ public class AsynServiceImpl implements AsynService {
 		}
 		return infoSb.toString();
 	}
+
+	public WorkQueueFullHandler getWorkQueueFullHandler() {
+		return workQueueFullHandler;
+	}
+
+	public void setWorkQueueFullHandler(WorkQueueFullHandler workQueueFullHandler) {
+		this.workQueueFullHandler = workQueueFullHandler;
+		this.workQueueFullHandler.setAsynService(this);
+	}
+	
+	
 
 }

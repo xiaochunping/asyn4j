@@ -1,0 +1,27 @@
+package com.googlecode.asyn4j.core;
+
+import com.googlecode.asyn4j.core.work.AsynWork;
+import com.googlecode.asyn4j.service.AsynService;
+
+public abstract class WorkQueueFullHandler {
+	
+	protected AsynService  asynService;
+	
+	/**
+	 * add the asynwork to handler
+	 * @param synWork
+	 */
+	public abstract void addAsynWork(AsynWork  asynWork);
+	
+	/**
+	 * process asynwork 
+	 */
+	public abstract void process();
+
+	public void setAsynService(AsynService asynService) {
+		this.asynService = asynService;
+	}
+	
+	
+
+}
