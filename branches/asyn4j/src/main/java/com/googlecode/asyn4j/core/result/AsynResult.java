@@ -7,11 +7,10 @@ public abstract class AsynResult implements Runnable {
 	@Override
 	public void run() {
 		doNotify();
-
 	}
 
 	public final void setInokeResult(Object object) {
-		//set method inoke result
+		// set method inoke result
 		this.methodResult = object;
 	}
 

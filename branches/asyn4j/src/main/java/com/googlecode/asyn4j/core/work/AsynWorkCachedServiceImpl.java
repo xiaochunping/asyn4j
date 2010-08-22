@@ -32,8 +32,10 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 	}
 
 	public AsynWorkCachedServiceImpl(int maxCacheWork,long addWorkWaitTime,WorkQueueFullHandler workQueueFullHandler) {
-		workQueue = new PriorityBlockingQueue<AsynWork>();
 		this.addWorkWaitTime = addWorkWaitTime;
+		this.maxCacheWork = maxCacheWork;
+		this.workQueueFullHandler = workQueueFullHandler;
+		workQueue = new PriorityBlockingQueue<AsynWork>();
 	}
 
 	public AsynWorkCachedServiceImpl(BlockingQueue<AsynWork> workQueue,
@@ -50,6 +52,7 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 		try {
 			if(totalWork - AsynWorkExecute.getExecuteWork()>maxCacheWork){
 				if(workQueueFullHandler!=null){
+					log.warn("asyn work add to cache queue");
 					workQueueFullHandler.addAsynWork(anycWork);
 				}else{
 					log.warn("work queue is full");
@@ -61,6 +64,7 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 					TimeUnit.MILLISECONDS);
 			if(!addFlag){
 				log.warn("work add fail");
+				workQueueFullHandler.addAsynWork(anycWork);
 			}else{
 				++totalWork;
 			}

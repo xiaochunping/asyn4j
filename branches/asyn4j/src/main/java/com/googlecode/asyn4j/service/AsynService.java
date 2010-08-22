@@ -2,6 +2,7 @@ package com.googlecode.asyn4j.service;
 
 import java.util.Map;
 
+import com.googlecode.asyn4j.core.WorkQueueFullHandler;
 import com.googlecode.asyn4j.core.result.AsynResult;
 import com.googlecode.asyn4j.core.work.AsynWork;
 
@@ -69,6 +70,12 @@ public interface AsynService {
 	 * @return
 	 */
 	public String getRunStatInfo();
+	
+	
+	public void setWorkQueueFullHandler(WorkQueueFullHandler workQueueFullHandler);
+	
+	
+	public void init();
 	
 	
 	
