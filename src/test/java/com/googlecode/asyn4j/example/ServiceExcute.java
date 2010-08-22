@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import com.googlecode.asyn4j.core.CacheAsynWorkHandler;
 import com.googlecode.asyn4j.core.result.AsynResult;
 
 import com.googlecode.asyn4j.service.AsynService;
@@ -24,7 +25,7 @@ public class ServiceExcute {
 
 	@Before
 	public void setUp() {
-		context = new FileSystemXmlApplicationContext("D:/java/asyn4j/src/main/java/applicationContext.xml");
+		//context = new FileSystemXmlApplicationContext("D:/java/asyn4j/src/main/java/applicationContext.xml");
 
 	}
 
@@ -41,9 +42,12 @@ public class ServiceExcute {
 	
 	public void testExecut2() throws InterruptedException {
 		AsynService anycService = new AsynServiceImpl();
+		anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
+		anycService.init();
 		for(long i=0;i<Integer.MAX_VALUE;i++){
-			anycService.addWorkWithSpring(new Object[] { "panxiuyan"+i }, "testBean",
+			anycService.addWork(new Object[] { "panxiuyan"+i }, TestBean.class,
 					"myName", new MyResult());
+			
 			if(i%99==0){
 				System.out.println(anycService.getRunStatInfo());
 			}
@@ -72,10 +76,8 @@ public class ServiceExcute {
 	}
 */
 	public static class MyResult extends AsynResult {
-
-		public void doNotify() {
-			
-			System.out.println("excute ok");
+        public void doNotify() {
+			System.out.println("excute ok!");
 		}
 	}
 	

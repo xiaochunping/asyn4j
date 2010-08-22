@@ -33,29 +33,27 @@ public class AsynServiceImpl implements AsynService {
 
 	private static AsynWorkCachedService anycWorkCachedService = null;
 
-	// default add work wait time
-	private static long addWorkWaitTime = Long.MAX_VALUE;
-
-	// default work queue length
-	private static int workQueueLength = 300;
-
+	//asyn work default work weight
 	private static final int DEFAULT_WORK_WEIGHT = 5;
 
 	private final static int CPU_NUMBER = Runtime.getRuntime()
 			.availableProcessors();
 	
-
-	private static ExecutorService workExecutor = null;
+    private static ExecutorService workExecutor = null;
 
 	private static ExecutorService callBackExecutor = null;
 
+	//service run flag
 	private static boolean run = false;
 
+	//call back block queue
 	private static BlockingQueue<AsynResult> resultBlockingQueue = null;
 
+	//status map
 	private static Map<String, Integer> statMap = new HashMap<String, Integer>(
 			3);
 
+	//status info stringbuffer
 	private static StringBuilder infoSb = new StringBuilder();
 
 	private AsynWorkExecute asynWorkExecute = null;
@@ -63,30 +61,46 @@ public class AsynServiceImpl implements AsynService {
 	private AsynResultCachedServiceImpl asynResultCacheService = null;
 	
 	private WorkQueueFullHandler workQueueFullHandler = null;
+	
+	//default work queue cache size
+	private static int maxCacheWork = 300;
+	
+	// default add work wait time
+	private static long addWorkWaitTime = Long.MAX_VALUE;
+	
+	//work thread pool size
+	private static int work_thread_num = (CPU_NUMBER / 2)+1;
+	
+	//callback thread pool size
+	private static int callback_thread_num = CPU_NUMBER / 2;
+
+	
 
 	public AsynServiceImpl() {
-		this(workQueueLength, addWorkWaitTime, ((CPU_NUMBER) / 2)+1,
-				(CPU_NUMBER) / 2);
+		this(maxCacheWork,addWorkWaitTime,work_thread_num,callback_thread_num);
 	}
 
 	public AsynServiceImpl(int maxCacheWork, long addWorkWaitTime,
 			int workThreadNum, int callBackThreadNum) {
-		init(maxCacheWork, addWorkWaitTime, workThreadNum, callBackThreadNum);
+		this.maxCacheWork = maxCacheWork;
+		this.addWorkWaitTime = addWorkWaitTime;
+		this.work_thread_num = workThreadNum;
+		this.callback_thread_num = callBackThreadNum;
 	}
 
 	/**
 	 * init Asyn Service
 	 */
-	private void init(int maxCacheWork, long addWorkWaitTime,
-			int workThreadNum, int callBackThreadNum) {
+	@Override
+	public void init() {
 
 		if (!run) {
-			workExecutor = Executors.newFixedThreadPool(workThreadNum);
+			workExecutor = Executors.newFixedThreadPool(work_thread_num);
 
-			callBackExecutor = Executors.newFixedThreadPool(callBackThreadNum);
+			callBackExecutor = Executors.newFixedThreadPool(callback_thread_num);
 
 			// init work execute server
-			anycWorkCachedService = new AsynWorkCachedServiceImpl(maxCacheWork,addWorkWaitTime);
+			anycWorkCachedService = new AsynWorkCachedServiceImpl(maxCacheWork,addWorkWaitTime,this.workQueueFullHandler);
 
 			// init work execute queue
 			resultBlockingQueue = new LinkedBlockingQueue<AsynResult>();
@@ -99,9 +113,12 @@ public class AsynServiceImpl implements AsynService {
 			// start callback thread
 			asynResultCacheService = new AsynResultCachedServiceImpl(
 					resultBlockingQueue, callBackExecutor);
-			callBackExecutor.execute(asynResultCacheService);
 			
 			new Thread(asynResultCacheService).start();
+			
+			if(workQueueFullHandler!=null){
+				workQueueFullHandler.process();
+			}
 			
 			run = true;
 		}
@@ -154,6 +171,10 @@ public class AsynServiceImpl implements AsynService {
 	@Override
 	public void addWorkWithSpring(Object[] params, String target,
 			String method, AsynResult anycResult, int weight) {
+		
+		if(target==null || method == null || weight<0){
+			throw new IllegalArgumentException("target name is null or  target method name is null or weight less 0");
+		}
 		// get spring bean
 		Object bean = AsynSpringUtil.getBean(target);
 
@@ -174,6 +195,9 @@ public class AsynServiceImpl implements AsynService {
 	 * @param asynWork
 	 */
 	public void addAsynWork(AsynWork asynWork) {
+		if(asynWork==null){
+			throw new IllegalArgumentException("asynWork is null");
+		}
 		if (asynWork.getWeight() <= 0) {
 			asynWork.setWeight(DEFAULT_WORK_WEIGHT);
 		}
@@ -205,10 +229,7 @@ public class AsynServiceImpl implements AsynService {
 		return infoSb.toString();
 	}
 
-	public WorkQueueFullHandler getWorkQueueFullHandler() {
-		return workQueueFullHandler;
-	}
-
+	@Override
 	public void setWorkQueueFullHandler(WorkQueueFullHandler workQueueFullHandler) {
 		this.workQueueFullHandler = workQueueFullHandler;
 		this.workQueueFullHandler.setAsynService(this);

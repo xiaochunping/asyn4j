@@ -37,7 +37,8 @@ public class AsynResultCachedServiceImpl implements AsynResultCacheService,
 		while (true) {
 			try {
 				//executor result work
-                executor.execute(anycResultQueue.take());
+				AsynResult asynResult = anycResultQueue.take();
+                executor.execute(asynResult);
 				resultBack++;
 			} catch (Exception e) {
 				log.error(e);
