@@ -17,9 +17,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.asyn4j.core.AsynWorkExecute;
 import com.googlecode.asyn4j.core.WorkQueueFullHandler;
-import com.googlecode.asyn4j.core.result.AsynResult;
-import com.googlecode.asyn4j.core.result.AsynResultCacheService;
-import com.googlecode.asyn4j.core.result.AsynResultCachedServiceImpl;
+import com.googlecode.asyn4j.core.callback.AsynCallBack;
+import com.googlecode.asyn4j.core.callback.AsynCallBackService;
+import com.googlecode.asyn4j.core.callback.AsynCallBackServiceImpl;
 import com.googlecode.asyn4j.core.work.AsynWork;
 import com.googlecode.asyn4j.core.work.AsynWorkCachedService;
 import com.googlecode.asyn4j.core.work.AsynWorkCachedServiceImpl;
@@ -47,7 +47,7 @@ public class AsynServiceImpl implements AsynService {
 	private static boolean run = false;
 
 	// call back block queue
-	private static BlockingQueue<AsynResult> resultBlockingQueue = null;
+	private static BlockingQueue<AsynCallBack> resultBlockingQueue = null;
 
 	// status map
 	private static Map<String, Integer> statMap = new HashMap<String, Integer>(
@@ -58,7 +58,7 @@ public class AsynServiceImpl implements AsynService {
 
 	private AsynWorkExecute asynWorkExecute = null;
 
-	private AsynResultCachedServiceImpl asynResultCacheService = null;
+	private AsynCallBackServiceImpl asynResultCacheService = null;
 
 	private WorkQueueFullHandler workQueueFullHandler = null;
 
@@ -104,7 +104,7 @@ public class AsynServiceImpl implements AsynService {
 					addWorkWaitTime, this.workQueueFullHandler);
 
 			// init work execute queue
-			resultBlockingQueue = new LinkedBlockingQueue<AsynResult>();
+			resultBlockingQueue = new LinkedBlockingQueue<AsynCallBack>();
 
 			// start work thread
 			asynWorkExecute = new AsynWorkExecute(anycWorkCachedService,
@@ -112,7 +112,7 @@ public class AsynServiceImpl implements AsynService {
 			new Thread(asynWorkExecute).start();
 
 			// start callback thread
-			asynResultCacheService = new AsynResultCachedServiceImpl(
+			asynResultCacheService = new AsynCallBackServiceImpl(
 					resultBlockingQueue, callBackExecutor);
 
 			new Thread(asynResultCacheService).start();
@@ -128,7 +128,7 @@ public class AsynServiceImpl implements AsynService {
 
 	@Override
 	public void addWork(Object[] params, Class clzss, String method,
-			AsynResult anycResult) {
+			AsynCallBack anycResult) {
 
 		this.addWork(params, clzss, method, anycResult, DEFAULT_WORK_WEIGHT);
 
@@ -136,14 +136,14 @@ public class AsynServiceImpl implements AsynService {
 
 	@Override
 	public void addWork(Object[] params, Object tagerObject, String method,
-			AsynResult anycResult) {
+			AsynCallBack anycResult) {
 		this.addWork(params, tagerObject, method, anycResult,
 				DEFAULT_WORK_WEIGHT);
 	}
 
 	@Override
 	public void addWorkWithSpring(Object[] params, String target,
-			String method, AsynResult anycResult) {
+			String method, AsynCallBack anycResult) {
 		this.addWorkWithSpring(params, target, method, anycResult,
 				DEFAULT_WORK_WEIGHT);
 
@@ -151,7 +151,7 @@ public class AsynServiceImpl implements AsynService {
 
 	@Override
 	public void addWork(Object[] params, Class clzss, String method,
-			AsynResult anycResult, int weight) {
+			AsynCallBack anycResult, int weight) {
 		Object target = null;
 
 		try {
@@ -178,7 +178,7 @@ public class AsynServiceImpl implements AsynService {
 
 	@Override
 	public void addWork(Object[] params, Object tagerObject, String method,
-			AsynResult anycResult, int weight) {
+			AsynCallBack anycResult, int weight) {
 		if (tagerObject == null) {
 			throw new IllegalArgumentException(
 					"tager object is null");
@@ -194,7 +194,7 @@ public class AsynServiceImpl implements AsynService {
 
 	@Override
 	public void addWorkWithSpring(Object[] params, String target,
-			String method, AsynResult anycResult, int weight) {
+			String method, AsynCallBack anycResult, int weight) {
 
 		if (target == null || method == null || weight < 0) {
 			throw new IllegalArgumentException(

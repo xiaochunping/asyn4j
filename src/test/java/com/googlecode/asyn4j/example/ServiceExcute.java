@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.googlecode.asyn4j.core.CacheAsynWorkHandler;
-import com.googlecode.asyn4j.core.result.AsynResult;
+import com.googlecode.asyn4j.core.callback.AsynCallBack;
 
 import com.googlecode.asyn4j.service.AsynService;
 import com.googlecode.asyn4j.service.AsynServiceImpl;
@@ -41,7 +41,6 @@ public class ServiceExcute {
 
     
 	@Test
-	@Ignore
 	public void testExecut2() throws InterruptedException {
 		AsynService anycService = new AsynServiceImpl();
 		anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
@@ -62,6 +61,7 @@ public class ServiceExcute {
   
    
 	@Test
+	@Ignore
 	public void testExecut3() throws InterruptedException {
 		AsynService anycService = new AsynServiceImpl();
 		anycService.init();
@@ -79,13 +79,13 @@ public class ServiceExcute {
 		Thread.sleep(2000);
 	}
 */
-	public static class MyResult extends AsynResult {
+	public static class MyResult extends AsynCallBack {
         public void doNotify() {
 			System.out.println("excute ok!");
 		}
 	}
 	
-	public static class MyHasResult extends AsynResult {
+	public static class MyHasResult extends AsynCallBack {
 		
       public void doNotify() {
 			if(this.methodResult!=null){

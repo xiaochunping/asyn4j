@@ -1,4 +1,4 @@
-package com.googlecode.asyn4j.core.result;
+package com.googlecode.asyn4j.core.callback;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import com.googlecode.asyn4j.core.CachedService;
 import com.googlecode.asyn4j.core.work.AsynWorkCachedServiceImpl;
 
-public class AsynResultCachedServiceImpl implements AsynResultCacheService,
+public class AsynCallBackServiceImpl implements AsynCallBackService,
 		Runnable {
 
 	private static final Log log = LogFactory
@@ -21,13 +21,13 @@ public class AsynResultCachedServiceImpl implements AsynResultCacheService,
 
 	private   ExecutorService executor = null;
 
-	private BlockingQueue<AsynResult> anycResultQueue = null;
+	private BlockingQueue<AsynCallBack> anycResultQueue = null;
 
 	// result call back number
 	private static int resultBack = 0;
 
-	public AsynResultCachedServiceImpl(
-			BlockingQueue<AsynResult> anycResultQueue,ExecutorService executor) {
+	public AsynCallBackServiceImpl(
+			BlockingQueue<AsynCallBack> anycResultQueue,ExecutorService executor) {
 		this.anycResultQueue = anycResultQueue;
 		this.executor = executor;
 	}
@@ -37,7 +37,7 @@ public class AsynResultCachedServiceImpl implements AsynResultCacheService,
 		while (true) {
 			try {
 				//executor result work
-				AsynResult asynResult = anycResultQueue.take();
+				AsynCallBack asynResult = anycResultQueue.take();
                 executor.execute(asynResult);
 				resultBack++;
 			} catch (Exception e) {
