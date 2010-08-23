@@ -3,6 +3,11 @@ package com.googlecode.asyn4j.core;
 import com.googlecode.asyn4j.core.work.AsynWork;
 import com.googlecode.asyn4j.service.AsynService;
 
+/**
+ * 
+ * @author pan_java
+ *
+ */
 public abstract class WorkQueueFullHandler {
 	
 	protected AsynService  asynService;

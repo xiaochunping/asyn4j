@@ -13,6 +13,11 @@ import org.apache.commons.logging.LogFactory;
 import com.googlecode.asyn4j.core.CachedService;
 import com.googlecode.asyn4j.core.work.AsynWorkCachedServiceImpl;
 
+/**
+ * 
+ * @author pan_java
+ *
+ */
 public class AsynCallBackServiceImpl implements AsynCallBackService,
 		Runnable {
 

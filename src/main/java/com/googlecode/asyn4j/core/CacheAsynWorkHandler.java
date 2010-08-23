@@ -9,6 +9,11 @@ import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.asyn4j.core.work.AsynWork;
 
+/**
+ * 
+ * @author pan_java
+ *
+ */
 public final class CacheAsynWorkHandler extends WorkQueueFullHandler {
     private final static Log log = LogFactory.getLog(CacheAsynWorkHandler.class);
 

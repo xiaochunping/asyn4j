@@ -2,7 +2,12 @@ package com.googlecode.asyn4j.core;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
+/**
+ * 
+ * @author pan_java
+ *
+ * @param <T>
+ */
 public abstract class CachedService<T> {
 
 	protected BlockingQueue<T> anycQueue = null;

@@ -74,17 +74,35 @@ public class AsynServiceImpl implements AsynService {
 	// callback thread pool size
 	private static int callback_thread_num = CPU_NUMBER / 2;
 
-	public AsynServiceImpl() {
+	private static AsynServiceImpl instance = null;
+
+	private AsynServiceImpl() {
 		this(maxCacheWork, addWorkWaitTime, work_thread_num,
 				callback_thread_num);
 	}
 
-	public AsynServiceImpl(int maxCacheWork, long addWorkWaitTime,
+	private AsynServiceImpl(int maxCacheWork, long addWorkWaitTime,
 			int workThreadNum, int callBackThreadNum) {
 		this.maxCacheWork = maxCacheWork;
 		this.addWorkWaitTime = addWorkWaitTime;
 		this.work_thread_num = workThreadNum;
 		this.callback_thread_num = callBackThreadNum;
+	}
+
+	public static AsynServiceImpl getService() {
+		if (instance == null) {
+			instance = new AsynServiceImpl();
+		}
+		return instance;
+	}
+
+	public static AsynServiceImpl getService(int maxCacheWork,
+			long addWorkWaitTime, int workThreadNum, int callBackThreadNum) {
+		if (instance == null) {
+			instance = new AsynServiceImpl(maxCacheWork, addWorkWaitTime,
+					workThreadNum, callBackThreadNum);
+		}
+		return instance;
 	}
 
 	/**
@@ -180,8 +198,7 @@ public class AsynServiceImpl implements AsynService {
 	public void addWork(Object[] params, Object tagerObject, String method,
 			AsynCallBack anycResult, int weight) {
 		if (tagerObject == null) {
-			throw new IllegalArgumentException(
-					"tager object is null");
+			throw new IllegalArgumentException("tager object is null");
 		}
 		AsynWork anycWork = new AsynWorkEntity(tagerObject, method, params,
 				anycResult);

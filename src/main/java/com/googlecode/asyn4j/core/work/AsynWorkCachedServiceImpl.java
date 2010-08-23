@@ -10,6 +10,11 @@ import org.apache.commons.logging.LogFactory;
 import com.googlecode.asyn4j.core.AsynWorkExecute;
 import com.googlecode.asyn4j.core.WorkQueueFullHandler;
 
+/**
+ * 
+ * @author pan_java
+ *
+ */
 public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
 
 	private static final Log log = LogFactory

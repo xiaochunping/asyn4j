@@ -10,6 +10,11 @@ import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.util.AsynSpringUtil;
 import com.googlecode.asyn4j.util.MethodUtil;
 
+/**
+ * 
+ * @author pan_java
+ *
+ */
 public class AsynWorkEntity implements AsynWork, Comparable<AsynWorkEntity> {
 
 	private Object target;

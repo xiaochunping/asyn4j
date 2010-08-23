@@ -4,6 +4,11 @@ import java.util.concurrent.Callable;
 
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
 
+/**
+ * 
+ * @author pan_java
+ *
+ */
 public interface AsynWork extends Callable<AsynCallBack> {
 	
 	/**
