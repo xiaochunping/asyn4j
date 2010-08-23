@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * get class method tool
  * 
- * @author panxiuyan
+ * @author pan_java
  * 
  */
 public class MethodUtil {
@@ -28,7 +28,7 @@ public class MethodUtil {
 		Method[] methods = clazz.getMethods();
 
 		for (Method method : methods) {
-			if (method.getName().equals(methodName)) {
+			if (method.getName().equals(methodName)) {//add methodName some item
 				mList.add(method);
 			}
 		}

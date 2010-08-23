@@ -33,51 +33,50 @@ public class AsynServiceImpl implements AsynService {
 
 	private static AsynWorkCachedService anycWorkCachedService = null;
 
-	//asyn work default work weight
+	// asyn work default work weight
 	private static final int DEFAULT_WORK_WEIGHT = 5;
 
 	private final static int CPU_NUMBER = Runtime.getRuntime()
 			.availableProcessors();
-	
-    private static ExecutorService workExecutor = null;
+
+	private static ExecutorService workExecutor = null;
 
 	private static ExecutorService callBackExecutor = null;
 
-	//service run flag
+	// service run flag
 	private static boolean run = false;
 
-	//call back block queue
+	// call back block queue
 	private static BlockingQueue<AsynResult> resultBlockingQueue = null;
 
-	//status map
+	// status map
 	private static Map<String, Integer> statMap = new HashMap<String, Integer>(
 			3);
 
-	//status info stringbuffer
+	// status info stringbuffer
 	private static StringBuilder infoSb = new StringBuilder();
 
 	private AsynWorkExecute asynWorkExecute = null;
 
 	private AsynResultCachedServiceImpl asynResultCacheService = null;
-	
+
 	private WorkQueueFullHandler workQueueFullHandler = null;
-	
-	//default work queue cache size
+
+	// default work queue cache size
 	private static int maxCacheWork = 300;
-	
+
 	// default add work wait time
 	private static long addWorkWaitTime = Long.MAX_VALUE;
-	
-	//work thread pool size
-	private static int work_thread_num = (CPU_NUMBER / 2)+1;
-	
-	//callback thread pool size
+
+	// work thread pool size
+	private static int work_thread_num = (CPU_NUMBER / 2) + 1;
+
+	// callback thread pool size
 	private static int callback_thread_num = CPU_NUMBER / 2;
 
-	
-
 	public AsynServiceImpl() {
-		this(maxCacheWork,addWorkWaitTime,work_thread_num,callback_thread_num);
+		this(maxCacheWork, addWorkWaitTime, work_thread_num,
+				callback_thread_num);
 	}
 
 	public AsynServiceImpl(int maxCacheWork, long addWorkWaitTime,
@@ -97,10 +96,12 @@ public class AsynServiceImpl implements AsynService {
 		if (!run) {
 			workExecutor = Executors.newFixedThreadPool(work_thread_num);
 
-			callBackExecutor = Executors.newFixedThreadPool(callback_thread_num);
+			callBackExecutor = Executors
+					.newFixedThreadPool(callback_thread_num);
 
 			// init work execute server
-			anycWorkCachedService = new AsynWorkCachedServiceImpl(maxCacheWork,addWorkWaitTime,this.workQueueFullHandler);
+			anycWorkCachedService = new AsynWorkCachedServiceImpl(maxCacheWork,
+					addWorkWaitTime, this.workQueueFullHandler);
 
 			// init work execute queue
 			resultBlockingQueue = new LinkedBlockingQueue<AsynResult>();
@@ -113,13 +114,13 @@ public class AsynServiceImpl implements AsynService {
 			// start callback thread
 			asynResultCacheService = new AsynResultCachedServiceImpl(
 					resultBlockingQueue, callBackExecutor);
-			
+
 			new Thread(asynResultCacheService).start();
-			
-			if(workQueueFullHandler!=null){
+
+			if (workQueueFullHandler != null) {
 				workQueueFullHandler.process();
 			}
-			
+
 			run = true;
 		}
 
@@ -134,6 +135,13 @@ public class AsynServiceImpl implements AsynService {
 	}
 
 	@Override
+	public void addWork(Object[] params, Object tagerObject, String method,
+			AsynResult anycResult) {
+		this.addWork(params, tagerObject, method, anycResult,
+				DEFAULT_WORK_WEIGHT);
+	}
+
+	@Override
 	public void addWorkWithSpring(Object[] params, String target,
 			String method, AsynResult anycResult) {
 		this.addWorkWithSpring(params, target, method, anycResult,
@@ -145,7 +153,7 @@ public class AsynServiceImpl implements AsynService {
 	public void addWork(Object[] params, Class clzss, String method,
 			AsynResult anycResult, int weight) {
 		Object target = null;
-        
+
 		try {
 			Constructor constructor = clzss.getConstructor();
 			if (constructor == null) {
@@ -169,11 +177,28 @@ public class AsynServiceImpl implements AsynService {
 	}
 
 	@Override
+	public void addWork(Object[] params, Object tagerObject, String method,
+			AsynResult anycResult, int weight) {
+		if (tagerObject == null) {
+			throw new IllegalArgumentException(
+					"tager object is null");
+		}
+		AsynWork anycWork = new AsynWorkEntity(tagerObject, method, params,
+				anycResult);
+
+		anycWork.setWeight(weight);
+
+		addAsynWork(anycWork);
+
+	}
+
+	@Override
 	public void addWorkWithSpring(Object[] params, String target,
 			String method, AsynResult anycResult, int weight) {
-		
-		if(target==null || method == null || weight<0){
-			throw new IllegalArgumentException("target name is null or  target method name is null or weight less 0");
+
+		if (target == null || method == null || weight < 0) {
+			throw new IllegalArgumentException(
+					"target name is null or  target method name is null or weight less 0");
 		}
 		// get spring bean
 		Object bean = AsynSpringUtil.getBean(target);
@@ -195,7 +220,7 @@ public class AsynServiceImpl implements AsynService {
 	 * @param asynWork
 	 */
 	public void addAsynWork(AsynWork asynWork) {
-		if(asynWork==null){
+		if (asynWork == null) {
 			throw new IllegalArgumentException("asynWork is null");
 		}
 		if (asynWork.getWeight() <= 0) {
@@ -230,11 +255,10 @@ public class AsynServiceImpl implements AsynService {
 	}
 
 	@Override
-	public void setWorkQueueFullHandler(WorkQueueFullHandler workQueueFullHandler) {
+	public void setWorkQueueFullHandler(
+			WorkQueueFullHandler workQueueFullHandler) {
 		this.workQueueFullHandler = workQueueFullHandler;
 		this.workQueueFullHandler.setAsynService(this);
 	}
-	
-	
 
 }

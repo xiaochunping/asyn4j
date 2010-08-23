@@ -17,6 +17,15 @@ public interface AsynService {
 	 */
 	public void addWork(Object[] params,Class clzss,String method,AsynResult anycResult);
 	
+	/**
+	 * 添加异步工作
+	 * @param params  －－ 参数
+	 * @param clzss  －－ 目标类对象
+	 * @param method  －－ 对应方法 
+	 * @param anycResult --回调
+	 */
+	public void addWork(Object[] params, Object tagerObject, String method,AsynResult anycResult);
+	
 	
 	/**
 	 * 添加异步工作
@@ -26,6 +35,16 @@ public interface AsynService {
 	 * @param anycResult --回调
 	 */
 	public void addWork(Object[] params,Class clzss,String method,AsynResult anycResult,int weight);
+	
+	
+	/**
+	 * 添加异步工作
+	 * @param params  －－ 参数
+	 * @param clzss  －－ 目标类对象
+	 * @param method  －－ 对应方法 
+	 * @param anycResult --回调
+	 */
+	public void addWork(Object[] params, Object tagerObject, String method,AsynResult anycResult, int weight);
 	
 	
 	
