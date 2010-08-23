@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.googlecode.asyn4j.core.result.AsynResult;
+import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.util.AsynSpringUtil;
 import com.googlecode.asyn4j.util.MethodUtil;
 
@@ -18,7 +18,7 @@ public class AsynWorkEntity implements AsynWork, Comparable<AsynWorkEntity> {
 
 	private Object[] params;
 
-	private AsynResult anycResult;
+	private AsynCallBack anycResult;
 
 	private int weight = 10;
 
@@ -26,7 +26,7 @@ public class AsynWorkEntity implements AsynWork, Comparable<AsynWorkEntity> {
 	private final static Map<String, Method> methodCacheMap = new ConcurrentHashMap<String, Method>();
 
 	public AsynWorkEntity(Object target, String method, Object[] params,
-			AsynResult anycResult) {
+			AsynCallBack anycResult) {
 		this.target = target;
 		this.method = method;
 		this.params = params;
@@ -42,7 +42,7 @@ public class AsynWorkEntity implements AsynWork, Comparable<AsynWorkEntity> {
 	}
 
 	@Override
-	public AsynResult call() throws Exception {
+	public AsynCallBack call() throws Exception {
 
 		if (target == null)
 			throw new RuntimeException("target object is null");
@@ -73,7 +73,7 @@ public class AsynWorkEntity implements AsynWork, Comparable<AsynWorkEntity> {
 	}
 	
 	@Override
-	public AsynResult getAnycResult() {
+	public AsynCallBack getAnycResult() {
 		return anycResult;
 	}
 

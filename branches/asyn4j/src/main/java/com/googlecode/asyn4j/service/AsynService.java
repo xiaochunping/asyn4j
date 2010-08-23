@@ -3,7 +3,7 @@ package com.googlecode.asyn4j.service;
 import java.util.Map;
 
 import com.googlecode.asyn4j.core.WorkQueueFullHandler;
-import com.googlecode.asyn4j.core.result.AsynResult;
+import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.core.work.AsynWork;
 
 public interface AsynService {
@@ -15,7 +15,7 @@ public interface AsynService {
 	 * @param method  －－ 对应方法 
 	 * @param anycResult --回调
 	 */
-	public void addWork(Object[] params,Class clzss,String method,AsynResult anycResult);
+	public void addWork(Object[] params,Class clzss,String method,AsynCallBack anycResult);
 	
 	/**
 	 * 添加异步工作
@@ -24,7 +24,7 @@ public interface AsynService {
 	 * @param method  －－ 对应方法 
 	 * @param anycResult --回调
 	 */
-	public void addWork(Object[] params, Object tagerObject, String method,AsynResult anycResult);
+	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack anycResult);
 	
 	
 	/**
@@ -34,7 +34,7 @@ public interface AsynService {
 	 * @param method  －－ 对应方法 
 	 * @param anycResult --回调
 	 */
-	public void addWork(Object[] params,Class clzss,String method,AsynResult anycResult,int weight);
+	public void addWork(Object[] params,Class clzss,String method,AsynCallBack anycResult,int weight);
 	
 	
 	/**
@@ -44,7 +44,7 @@ public interface AsynService {
 	 * @param method  －－ 对应方法 
 	 * @param anycResult --回调
 	 */
-	public void addWork(Object[] params, Object tagerObject, String method,AsynResult anycResult, int weight);
+	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack anycResult, int weight);
 	
 	
 	
@@ -56,7 +56,7 @@ public interface AsynService {
 	 * @param method  －－ 对应方法 
 	 * @param anycResult --回调
 	 */
-	public void addWorkWithSpring(Object[] params,String target,String method,AsynResult anycResult);
+	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack anycResult);
 	
 	
 	/**
@@ -67,7 +67,7 @@ public interface AsynService {
 	 * @param anycResult --回调
 	 * 
 	 */
-	public void addWorkWithSpring(Object[] params,String target,String method,AsynResult anycResult,int weight);
+	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack anycResult,int weight);
 	
 	
 	

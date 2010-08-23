@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.googlecode.asyn4j.core.result.AsynResult;
+import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.core.work.AsynWork;
 
 /**
@@ -19,10 +19,10 @@ public class WorkProcessor implements Runnable {
 	private static final Log log = LogFactory.getLog(WorkProcessor.class);
 	private AsynWork asynWork;
 	private String name;
-	private BlockingQueue<AsynResult> resultQueue;
+	private BlockingQueue<AsynCallBack> resultQueue;
 
 	public WorkProcessor(AsynWork asynWork, String name,
-			final BlockingQueue<AsynResult> resultQueue) {
+			final BlockingQueue<AsynCallBack> resultQueue) {
 		this.asynWork = asynWork;
 		this.name = name;
 		this.resultQueue = resultQueue;
@@ -35,7 +35,7 @@ public class WorkProcessor implements Runnable {
 			setName(currentThread, name);
 		}
 		try {
-			AsynResult result = asynWork.call();
+			AsynCallBack result = asynWork.call();
 			//execute work total increment
 			AsynWorkExecute.incrementExecuteWork();
 			if (result != null)

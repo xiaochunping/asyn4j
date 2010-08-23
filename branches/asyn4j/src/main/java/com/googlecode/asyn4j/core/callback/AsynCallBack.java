@@ -1,6 +1,6 @@
-package com.googlecode.asyn4j.core.result;
+package com.googlecode.asyn4j.core.callback;
 
-public abstract class AsynResult implements Runnable {
+public abstract class AsynCallBack implements Runnable {
 
 	protected Object methodResult;
 

@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.googlecode.asyn4j.core.result.AsynResult;
+import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.core.work.AsynWork;
 import com.googlecode.asyn4j.core.work.AsynWorkCachedService;
 
@@ -19,7 +19,7 @@ public class AsynWorkExecute implements Runnable {
 
 	private AsynWorkCachedService anycWorkCachedService = null;
 
-	private BlockingQueue<AsynResult> resultBlockingQueue = null;
+	private BlockingQueue<AsynCallBack> resultBlockingQueue = null;
 
 	private ExecutorService executorservice = null;
 
@@ -28,7 +28,7 @@ public class AsynWorkExecute implements Runnable {
 
 	public AsynWorkExecute(AsynWorkCachedService anycWorkCachedService,
 			ExecutorService executorservice,
-			BlockingQueue<AsynResult> resultBlockingQueue) {
+			BlockingQueue<AsynCallBack> resultBlockingQueue) {
 		this.anycWorkCachedService = anycWorkCachedService;
 		this.executorservice = executorservice;
 		this.resultBlockingQueue = resultBlockingQueue;
