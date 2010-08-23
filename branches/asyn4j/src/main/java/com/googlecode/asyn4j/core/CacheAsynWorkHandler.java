@@ -46,7 +46,6 @@ public final class CacheAsynWorkHandler extends WorkQueueFullHandler {
 					try {
 						asynWork = cacheLink.take();
 						asynService.addAsynWork(asynWork);
-						log.debug("execute cache queue task");
 					} catch (InterruptedException e) {
 					}
 				}
