@@ -1,5 +1,7 @@
 package com.googlecode.asyn4j.example;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,7 +41,7 @@ public class ServiceExcute {
 
     
 	@Test
-	
+	@Ignore
 	public void testExecut2() throws InterruptedException {
 		AsynService anycService = new AsynServiceImpl();
 		anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
@@ -60,10 +62,12 @@ public class ServiceExcute {
   
    
 	@Test
-	@Ignore
 	public void testExecut3() throws InterruptedException {
 		AsynService anycService = new AsynServiceImpl();
-		anycService.addWork(new Object[] { "panxiuyan" }, TestBean.class, "myName",new MyResult());
+		anycService.init();
+		List list = new ArrayList();
+		anycService.addWork(new Object[] { list }, TestBean.class, "testList",new MyResult());
+		Thread.sleep(Long.MAX_VALUE);
 		
 	}
 	

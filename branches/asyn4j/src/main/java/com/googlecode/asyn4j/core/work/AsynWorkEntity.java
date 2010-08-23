@@ -59,6 +59,10 @@ public class AsynWorkEntity implements AsynWork, Comparable<AsynWorkEntity> {
 				methodCacheMap.put(methodKey, targetMethod);
 			}
 		}
+		
+		if(targetMethod==null){
+			throw new IllegalArgumentException("target method is null");
+		}
 
 		Object result = targetMethod.invoke(target, params);
 		if(anycResult!=null){//if call back is not null
