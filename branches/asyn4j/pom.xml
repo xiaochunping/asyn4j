@@ -7,7 +7,7 @@
 
   <groupId>com.googlecode.asyn4j</groupId>
   <artifactId>asyn4j</artifactId>
-  <version>1.0-beta</version>
+  <version>1.0</version>
   <packaging>jar</packaging>
 
   <name>anyc</name>

@@ -19,7 +19,7 @@
     <property name="basedir" value="D:\java\asyn4j"/>
     <property name="java.endorsed.dirs" value="D:\java\jdk1.6\jre\lib\endorsed"/>
     <property name="os.arch" value="x86"/>
-    <property name="surefire.real.class.path" value="C:\DOCUME~1\yuncheng\LOCALS~1\Temp\surefirebooter1517.jar"/>
+    <property name="surefire.real.class.path" value="C:\DOCUME~1\yuncheng\LOCALS~1\Temp\surefirebooter33250.jar"/>
     <property name="java.io.tmpdir" value="C:\DOCUME~1\yuncheng\LOCALS~1\Temp\"/>
     <property name="line.separator" value="
 "/>

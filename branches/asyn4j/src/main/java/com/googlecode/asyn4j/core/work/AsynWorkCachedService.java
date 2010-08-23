@@ -1,5 +1,10 @@
 package com.googlecode.asyn4j.core.work;
 
+/**
+ * 
+ * @author pan_java
+ *
+ */
 public interface AsynWorkCachedService {
 
 	/**

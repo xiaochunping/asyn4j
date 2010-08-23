@@ -14,6 +14,11 @@ import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.core.work.AsynWork;
 import com.googlecode.asyn4j.core.work.AsynWorkCachedService;
 
+/**
+ * 
+ * @author pan_java
+ *
+ */
 public class AsynWorkExecute implements Runnable {
 	private static final Log log = LogFactory.getLog(AsynWorkExecute.class);
 

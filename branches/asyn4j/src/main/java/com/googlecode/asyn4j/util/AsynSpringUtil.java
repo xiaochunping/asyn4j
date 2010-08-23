@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 
 /**
  * spring tool 
- * @author panxiuyan
+ * @author pan_java
  *
  */
 public class AsynSpringUtil implements ApplicationContextAware {
