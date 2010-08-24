@@ -1,6 +1,7 @@
  
 例子:
-   主方法{{{
+   主方法
+{{{
 	public static void main(String[] args) {
 		// 初始化异步工作服务
 		AsynService asynService =  AsynServiceImpl.getService(300, 3000L, 3, 2);
@@ -13,7 +14,7 @@
 			asynService.addWork(new Object[] { "asyn4j" + i },
 					TargetService.class, "test", new TargetBack());
 		}
-}}
+        }
 
 }}}
 
