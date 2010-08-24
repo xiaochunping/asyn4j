@@ -89,8 +89,15 @@ AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100,
 
 ===4.异步工作优级===
 {{{
-默认优先级为5   
+默认优先级为5  ,相关API
+//目标对象为指定实例
 public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, int weight);
+
+//目标对象为class
+public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack,int weight);
+
+//Spring对应
+public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack,int weight);
 
 }}}
 
