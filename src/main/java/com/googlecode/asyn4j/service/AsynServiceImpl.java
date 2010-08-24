@@ -146,30 +146,30 @@ public class AsynServiceImpl implements AsynService {
 
 	@Override
 	public void addWork(Object[] params, Class clzss, String method,
-			AsynCallBack anycResult) {
+			AsynCallBack asynCallBack) {
 
-		this.addWork(params, clzss, method, anycResult, DEFAULT_WORK_WEIGHT);
+		this.addWork(params, clzss, method, asynCallBack, DEFAULT_WORK_WEIGHT);
 
 	}
 
 	@Override
 	public void addWork(Object[] params, Object tagerObject, String method,
-			AsynCallBack anycResult) {
-		this.addWork(params, tagerObject, method, anycResult,
+			AsynCallBack asynCallBack) {
+		this.addWork(params, tagerObject, method, asynCallBack,
 				DEFAULT_WORK_WEIGHT);
 	}
 
 	@Override
 	public void addWorkWithSpring(Object[] params, String target,
-			String method, AsynCallBack anycResult) {
-		this.addWorkWithSpring(params, target, method, anycResult,
+			String method, AsynCallBack asynCallBack) {
+		this.addWorkWithSpring(params, target, method, asynCallBack,
 				DEFAULT_WORK_WEIGHT);
 
 	}
 
 	@Override
 	public void addWork(Object[] params, Class clzss, String method,
-			AsynCallBack anycResult, int weight) {
+			AsynCallBack asynCallBack, int weight) {
 		Object target = null;
 
 		try {
@@ -186,7 +186,7 @@ public class AsynServiceImpl implements AsynService {
 		}
 
 		AsynWork anycWork = new AsynWorkEntity(target, method, params,
-				anycResult);
+				asynCallBack);
 
 		anycWork.setWeight(weight);
 
@@ -196,12 +196,12 @@ public class AsynServiceImpl implements AsynService {
 
 	@Override
 	public void addWork(Object[] params, Object tagerObject, String method,
-			AsynCallBack anycResult, int weight) {
+			AsynCallBack asynCallBack, int weight) {
 		if (tagerObject == null) {
 			throw new IllegalArgumentException("tager object is null");
 		}
 		AsynWork anycWork = new AsynWorkEntity(tagerObject, method, params,
-				anycResult);
+				asynCallBack);
 
 		anycWork.setWeight(weight);
 
@@ -211,7 +211,7 @@ public class AsynServiceImpl implements AsynService {
 
 	@Override
 	public void addWorkWithSpring(Object[] params, String target,
-			String method, AsynCallBack anycResult, int weight) {
+			String method, AsynCallBack asynCallBack, int weight) {
 
 		if (target == null || method == null || weight < 0) {
 			throw new IllegalArgumentException(
@@ -223,7 +223,7 @@ public class AsynServiceImpl implements AsynService {
 		if (bean == null)
 			throw new IllegalArgumentException("spring bean is null");
 
-		AsynWork anycWork = new AsynWorkEntity(bean, method, params, anycResult);
+		AsynWork anycWork = new AsynWorkEntity(bean, method, params, asynCallBack);
 
 		anycWork.setWeight(weight);
 
