@@ -12,7 +12,9 @@
 			// 添加加异步工作- TargetService 的 test 方法 ，方法参数 asynej+ i
 			asynService.addWork(new Object[] { "asyn4j" + i },
 					TargetService.class, "test", new TargetBack());
-		}}
+		}
+}}
+
 }}}
 
 回调方法
