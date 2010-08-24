@@ -1,5 +1,5 @@
  
-=例子:=
+==例子:==
    ===调用普通方法===
    主方法
 {{{
@@ -51,8 +51,9 @@ public class TargetService {
 {{{
   asynService.addWorkWithSpring(new Object[] { "panxiuyan" + i }, "testBean", "myName");
 }}}
-API说明
-1.默认构造函数
+
+==API说明==
+===一.默认构造函数===
 {{{
    AsynServiceImpl.getService();
 }}}
@@ -63,14 +64,14 @@ API说明
 4.	回调执行线程池大小  --- CPU核数/2
 
 
-2.自定义参数构造函数,参数顺序对应前面的说明
+===二.自定义参数构造函数,参数顺序对应前面的说明===
 {{{
  AsynServiceImpl.getService (1000, 1000L, 3, 2);
 }}}
 
 AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序再引用.
 
-3.设置缓存工作队列处理器（在init方法调用前设置）
+===三.设置缓存工作队列处理器（在init方法调用前设置）===
 {{{ 
  public void setWorkQueueFullHandler(WorkQueueFullHandler workQueueFullHandler);
 }}}
@@ -78,12 +79,12 @@ AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序�
 系统有一个默认的处理器  CacheAsynWorkHandler 建议实现自己的处理器,需实现 addAsynWork，process 方法 。process建议启动一个守护线程监听.
 
 
-4.启动服务
+===四.启动服务===
 {{{ 
  public void init(); 
 }}}
 
-5．添加异步工作API
+===五．添加异步工作API===
 {{{
 /**
 	 * 添加异步工作
@@ -148,7 +149,7 @@ AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序�
 	public void addAsynWork(AsynWork asynWork);
 	
 }}}
-6.获取运行状态信息
+===六.获取运行状态信息===
 {{{
 /**
 	 * 
@@ -170,7 +171,8 @@ callback:执行回调数
 	public String getRunStatInfo();
 
 }}}
-7. 调用基于Spring Bean的异步方法
+
+===七. 调用基于Spring Bean的异步方法===
 
 1.applicationContext.xml 加入
 {{{
@@ -187,7 +189,7 @@ public void addWorkWithSpring(Object[] params,String target,String method,AsynCa
 }}}
 
 
-8．创建基于Spring 的依赖Bean
+===八．创建基于Spring 的依赖Bean===
 
 asynService spring bean 工厂
 {{{
@@ -197,7 +199,7 @@ asynService spring bean 工厂
 }}}
 
 
-9.注意
+===九.注意===
 查找异步工作目标方法时,无法区分方法同名的并且参数是继承关系的方法.
   
     
