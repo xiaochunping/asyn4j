@@ -145,6 +145,24 @@ public class AsynServiceImpl implements AsynService {
 	}
 
 	@Override
+	public void addWork(Object[] params, Class clzss, String method) {
+		this.addWork(params, clzss, method, null);
+
+	}
+
+	@Override
+	public void addWork(Object[] params, Object tagerObject, String method) {
+		this.addWork(params, tagerObject, method, null);
+
+	}
+
+	@Override
+	public void addWorkWithSpring(Object[] params, String target, String method) {
+		this.addWorkWithSpring(params, target, method, null);
+
+	}
+
+	@Override
 	public void addWork(Object[] params, Class clzss, String method,
 			AsynCallBack asynCallBack) {
 
@@ -223,7 +241,8 @@ public class AsynServiceImpl implements AsynService {
 		if (bean == null)
 			throw new IllegalArgumentException("spring bean is null");
 
-		AsynWork anycWork = new AsynWorkEntity(bean, method, params, asynCallBack);
+		AsynWork anycWork = new AsynWorkEntity(bean, method, params,
+				asynCallBack);
 
 		anycWork.setWeight(weight);
 
