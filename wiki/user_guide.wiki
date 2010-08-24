@@ -75,7 +75,7 @@ public class TargetService {
 }
 }}}
 
-===使用异步工作缓冲器===
+===3.使用异步工作缓冲器===
 {{{
 AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100,
 				100);
@@ -83,7 +83,17 @@ AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100,
 		anycService.init();
 
 }}}
+
 当工作队列中的工作超过300个时，异步工作将由CacheAsynWorkHandler处理;
+
+
+===4.异步工作优级===
+{{{
+默认优先级为5   
+public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, int weight);
+
+}}}
+
 
 ==API说明==
 ===一.默认构造函数===
