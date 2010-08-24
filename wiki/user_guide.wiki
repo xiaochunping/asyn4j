@@ -1,6 +1,6 @@
  
 例子:
-   =调用普通方法=
+   ===调用普通方法===
    主方法
 {{{
 	public static void main(String[] args) {
@@ -46,6 +46,11 @@ public class TargetService {
 }
 }}}
 
+===调用Spring Bean方法===
+调用 Spring testBean 的 myName 方法
+{{{
+  asynService.addWorkWithSpring(new Object[] { "panxiuyan" + i }, "testBean", "myName");
+}}}
 API说明
 1.默认构造函数
 {{{
