@@ -47,7 +47,9 @@ public class TargetService {
 
 API说明
 1.默认构造函数
-{{{AsynServiceImpl.getService();}}}
+{{{
+   AsynServiceImpl.getService();
+}}}
 采用的默认参数为,
 1.	最大工作队列缓存工作数 – 300
 2.	当工作队列满时添加工作等待时间-- Long.MAX_VALUE;
@@ -56,18 +58,24 @@ API说明
 
 
 2.自定义参数构造函数,参数顺序对应前面的说明
-{{{AsynServiceImpl.getService (1000, 1000L, 3, 2);}}}
+{{{
+ AsynServiceImpl.getService (1000, 1000L, 3, 2);
+}}}
 
 AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序再引用.
 
 3.设置缓存工作队列处理器（在init方法调用前设置）
-{{{ public void setWorkQueueFullHandler(WorkQueueFullHandler workQueueFullHandler);}}}
+{{{ 
+ public void setWorkQueueFullHandler(WorkQueueFullHandler workQueueFullHandler);
+}}}
 
 系统有一个默认的处理器  CacheAsynWorkHandler 建议实现自己的处理器,需实现 addAsynWork，process 方法 。process建议启动一个守护线程监听.
 
 
 4.启动服务
-{{{ public void init(); }}}
+{{{ 
+ public void init(); 
+}}}
 
 5．添加异步工作API
 {{{
