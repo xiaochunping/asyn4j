@@ -21,16 +21,16 @@ public interface AsynService {
 	 * @param method  －－ 对应方法 
 	 * @param anycResult --回调
 	 */
-	public void addWork(Object[] params,Class clzss,String method,AsynCallBack anycResult);
+	public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack);
 	
 	/**
 	 * 添加异步工作
 	 * @param params  －－ 参数
 	 * @param clzss  －－ 目标类对象
 	 * @param method  －－ 对应方法 
-	 * @param anycResult --回调
+	 * @param asynCallBack --回调
 	 */
-	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack anycResult);
+	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack);
 	
 	
 	/**
@@ -38,9 +38,9 @@ public interface AsynService {
 	 * @param params  －－ 参数
 	 * @param clzss  －－ 目标类ClASS
 	 * @param method  －－ 对应方法 
-	 * @param anycResult --回调
+	 * @param asynCallBack －－ 回调
 	 */
-	public void addWork(Object[] params,Class clzss,String method,AsynCallBack anycResult,int weight);
+	public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack,int weight);
 	
 	
 	/**
@@ -48,10 +48,10 @@ public interface AsynService {
 	 * @param params  －－ 参数
 	 * @param clzss  －－ 目标类对象
 	 * @param method  －－ 对应方法 
-	 * @param anycResult --回调
-	 * @param weight --  异步工作权重
+	 * @param asynCallBack －－回调
+	 * @param weight －－  异步工作权重
 	 */
-	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack anycResult, int weight);
+	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, int weight);
 	
 	
 	
@@ -61,9 +61,9 @@ public interface AsynService {
 	 * @param params  －－ 参数
 	 * @param target  －－ 目标
 	 * @param method  －－ 对应方法 
-	 * @param anycResult --回调
+	 * @param asynCallBack －－回调
 	 */
-	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack anycResult);
+	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack);
 	
 	
 	/**
@@ -71,17 +71,17 @@ public interface AsynService {
 	 * @param params  －－ 参数
 	 * @param target  －－ 目标
 	 * @param method  －－ 对应方法 
-	 * @param anycResult --回调
-	 * @param weight --  异步工作权重
+	 * @param asynCallBack －－回调
+	 * @param weight －－  异步工作权重
 	 * 
 	 */
-	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack anycResult,int weight);
+	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack,int weight);
 	
 	
 	
 	/**
 	 *  添加异步工作
-	 * @param asynWork   -- 异步工作实体
+	 * @param asynWork   －－ 异步工作实体
 	 */
 	public void addAsynWork(AsynWork asynWork);
 	
