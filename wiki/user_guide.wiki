@@ -1,5 +1,6 @@
  
 例子:
+   =调用普通方法=
    主方法
 {{{
 	public static void main(String[] args) {
