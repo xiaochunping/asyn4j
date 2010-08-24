@@ -20,26 +20,28 @@ import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.service.AsynService;
 import com.googlecode.asyn4j.service.AsynServiceImpl;
 import com.googlecode.asyn4j.springbean.TestBean;
+import com.googlecode.asyn4j.springbean.TestMain;
 
 public class ServiceExcute {
 	static ApplicationContext context = null;
 
 	@Before
 	public void setUp() {
-		// context = new
-		// FileSystemXmlApplicationContext("D:/java/asyn4j/src/main/java/applicationContext.xml");
+		 context = new
+		 FileSystemXmlApplicationContext("D:/java/asyn4j/src/main/java/applicationContext.xml");
 
 	}
 
 	@Test
+	@Ignore
 	public void testExecut2() throws InterruptedException {
 		AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100,
 				100);
 		anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
 		anycService.init();
-		for (long i = 0; i < Integer.MAX_VALUE; i++) {
+		for (long i = 0; i < 1000; i++) {
 			anycService.addWork(new Object[] { "panxiuyan" + i },
-					TestBean.class, "myName", new MyResult());
+					TestBean.class, "myName", new MyHasResult());
 
 			if (i % 99 == 0) {
 				System.out.println(anycService.getRunStatInfo());
@@ -56,11 +58,19 @@ public class ServiceExcute {
 		AsynService anycService = AsynServiceImpl.getService();
 		anycService.init();
 		List list = new ArrayList();
-		anycService.addWork(new Object[] { list }, TestBean.class, "testList",
+		anycService.addWork(new Object[] { list }, TestBean.class, "myName",
 				new MyResult());
 		Thread.sleep(Long.MAX_VALUE);
 
 	}
+	@Test
+	public void testExecutSpring() throws InterruptedException {
+		TestMain testMain = (TestMain)context.getBean("testMain");
+		testMain.maintest();
+		Thread.sleep(Long.MAX_VALUE);
+	}
+	
+	
 
 	public static class MyResult extends AsynCallBack {
 		public void doNotify() {

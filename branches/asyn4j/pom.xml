@@ -10,7 +10,7 @@
   <version>1.0</version>
   <packaging>jar</packaging>
 
-  <name>anyc</name>
+  <name>asyn4j</name>
   <url>http://maven.apache.org</url>
 
   <properties>

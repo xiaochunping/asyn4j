@@ -18,8 +18,20 @@
    </bean>
    
    
-   <bean id="springBeanUtil" class="com.googlecode.asyn4j.util.AsynSpringUtil">
+   <bean id="springBeanUtil" class="com.googlecode.asyn4j.spring.AsynSpringUtil">
 	
-	</bean>
+   </bean>
+	
+   <bean id="asynService" class="com.googlecode.asyn4j.spring.AsynServiceFactoryBean">
+		
+   </bean>
+   
+   <bean id="testMain" class="com.googlecode.asyn4j.springbean.TestMain">
+		<property name="asynService">
+			 <ref local="asynService"></ref>
+		</property>
+   </bean>
+   
+   
   
 </beans>
