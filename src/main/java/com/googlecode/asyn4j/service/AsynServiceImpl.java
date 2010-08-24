@@ -24,7 +24,7 @@ import com.googlecode.asyn4j.core.work.AsynWork;
 import com.googlecode.asyn4j.core.work.AsynWorkCachedService;
 import com.googlecode.asyn4j.core.work.AsynWorkCachedServiceImpl;
 import com.googlecode.asyn4j.core.work.AsynWorkEntity;
-import com.googlecode.asyn4j.util.AsynSpringUtil;
+import com.googlecode.asyn4j.spring.AsynSpringUtil;
 
 @SuppressWarnings("unchecked")
 public class AsynServiceImpl implements AsynService {

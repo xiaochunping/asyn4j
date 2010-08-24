@@ -1,4 +1,4 @@
-package com.googlecode.asyn4j.util;
+package com.googlecode.asyn4j.spring;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

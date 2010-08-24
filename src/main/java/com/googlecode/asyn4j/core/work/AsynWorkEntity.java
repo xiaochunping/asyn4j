@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
-import com.googlecode.asyn4j.util.AsynSpringUtil;
+import com.googlecode.asyn4j.spring.AsynSpringUtil;
 import com.googlecode.asyn4j.util.MethodUtil;
 
 /**
