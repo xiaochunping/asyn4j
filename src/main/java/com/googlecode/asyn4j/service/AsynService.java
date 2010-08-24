@@ -14,6 +14,15 @@ import com.googlecode.asyn4j.core.work.AsynWork;
  */
 public interface AsynService {
 	
+	
+	/**
+	 * 添加异步工作
+	 * @param params  －－ 参数
+	 * @param clzss  －－ 目标类ClASS
+	 * @param method  －－ 对应方法 
+	 */
+	public void addWork(Object[] params,Class clzss,String method);
+	
 	/**
 	 * 添加异步工作
 	 * @param params  －－ 参数
@@ -22,6 +31,15 @@ public interface AsynService {
 	 * @param anycResult --回调
 	 */
 	public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack);
+	
+	
+	/**
+	 * 添加异步工作
+	 * @param params  －－ 参数
+	 * @param clzss  －－ 目标类对象
+	 * @param method  －－ 对应方法 
+	 */
+	public void addWork(Object[] params, Object tagerObject, String method);
 	
 	/**
 	 * 添加异步工作
@@ -54,7 +72,13 @@ public interface AsynService {
 	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, int weight);
 	
 	
-	
+	/**
+	 * 添加异步工作依赖Spring Bean
+	 * @param params  －－ 参数
+	 * @param target  －－ 目标
+	 * @param method  －－ 对应方法 
+	 */
+	public void addWorkWithSpring(Object[] params,String target,String method);
 	
 	/**
 	 * 添加异步工作依赖Spring Bean
