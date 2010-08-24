@@ -112,11 +112,11 @@ public void addWorkWithSpring(Object[] params,String target,String method,AsynCa
 {{{
    AsynServiceImpl.getService();
 }}}
-采用的默认参数为,
-#最大工作队列缓存工作数 – 300
-#当工作队列满时添加工作等待时间-- Long.MAX_VALUE;
-#异步工作执行线程池大小  ---- CPU核数/2 +1
-#回调执行线程池大小  --- CPU核数/2
+*采用的默认参数为,
+#(maxCacheWork)最大工作队列缓存工作数 – 300
+#(addWorkWaitTime)当工作队列满时添加工作等待时间-- Long.MAX_VALUE;
+#(workThreadNum)异步工作执行线程池大小  ---- CPU核数/2 +1
+#(callBackThreadNum)回调执行线程池大小  --- CPU核数/2
 
 
 ===二.自定义参数构造函数,参数顺序对应前面的说明===
