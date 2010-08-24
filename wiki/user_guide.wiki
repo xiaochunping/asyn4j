@@ -1,0 +1,186 @@
+ 
+例子:
+   主方法{{{
+	public static void main(String[] args) {
+		// 初始化异步工作服务
+		AsynService asynService =  AsynServiceImpl.getService(300, 3000L, 3, 2);
+		// 启动服务
+		asynService.init();
+		// 异步回调对象
+		AsynCallBack back = new TargetBack();
+		for (int i = 0; i < 1000; i++) {
+			// 添加加异步工作- TargetService 的 test 方法 ，方法参数 asynej+ i
+			asynService.addWork(new Object[] { "asyn4j" + i },
+					TargetService.class, "test", new TargetBack());
+		}
+	}}}
+
+回调方法
+{{{//回调需继承AsynCallBack抽象类
+public class TargetBack extends AsynCallBack {
+
+	@Override
+	public void doNotify() {
+		//输出异步方法调用结果
+		System.out.println(this.methodResult);
+
+	}
+
+}
+}}}
+
+目标对象
+{{{
+//异步调用对象
+public class TargetService {
+	public String test(String name){
+		System.out.println(name +" test is execute!");
+		return name;
+	}
+
+}
+}}}
+
+API说明
+1.默认构造函数
+{{{AsynServiceImpl.getService();}}}
+采用的默认参数为,
+1.	最大工作队列缓存工作数 – 300
+2.	当工作队列满时添加工作等待时间-- Long.MAX_VALUE;
+3.	异步工作执行线程池大小  ---- CPU核数/2 +1
+4.	回调执行线程池大小  --- CPU核数/2
+
+
+2.自定义参数构造函数,参数顺序对应前面的说明
+{{{AsynServiceImpl.getService (1000, 1000L, 3, 2);}}}
+
+AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序再引用.
+
+3.设置缓存工作队列处理器（在init方法调用前设置）
+{{{ public void setWorkQueueFullHandler(WorkQueueFullHandler workQueueFullHandler);}}}
+
+系统有一个默认的处理器  CacheAsynWorkHandler 建议实现自己的处理器,需实现 addAsynWork，process 方法 。process建议启动一个守护线程监听.
+
+
+4.启动服务
+{{{ public void init(); }}}
+
+5．添加异步工作API
+{{{
+/**
+	 * 添加异步工作
+	 * @param params  －－ 目标方法参数
+	 * @param clzss  －－ 目标类ClASS
+	 * @param method  －－ 对应方法 
+	 * @param asynCallBack --回调
+	 */
+	public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack);
+	
+	/**
+	 * 添加异步工作
+	 * @param params  －－目标方法参数
+	 * @param clzss  －－ 目标类对象
+	 * @param method  －－ 对应方法 
+	 * @param asynCallBack --回调
+	 */
+	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack);
+	
+	/**
+	 * 添加异步工作
+	 * @param params  －－目标方法参数
+	 * @param clzss  －－ 目标类ClASS
+	 * @param method  －－ 对应方法 
+	 * @param asynCallBack --回调
+	 */
+	public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack,int weight);
+	
+	/**
+	 * 添加异步工作
+	 * @param params  －－目标方法参数
+	 * @param clzss  －－ 目标类对象
+	 * @param method  －－ 对应方法 
+	 * @param asynCallBack --回调
+      *@param weight --   工作权重 默认 5
+	 */
+	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, int weight);
+	
+/**
+	 * 添加异步工作依赖Spring Bean
+	 * @param params  －－目标方法参数
+	 * @param target  －－ Bean名称
+	 * @param method  －－ 对应方法 
+	 * @param asynCallBack --回调
+	 */
+	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack);
+	
+/**
+	 * 添加异步工作依赖Spring Bean
+	 * @param params  －－目标方法参数
+	 * @param target  －－ Bean名称
+	 * @param method  －－ 对应方法 
+	  *@param weight --   工作权重 默认 5
+	 * 
+	 */
+	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack,int weight);
+	
+/**
+	 *  添加异步工作
+	 * @param asynWork   -- 异步工作实体
+	 */
+	public void addAsynWork(AsynWork asynWork);
+	
+}}}
+6.获取运行状态信息
+{{{
+/**
+	 * 
+	 * 获取运行状态MAP
+	 * @return
+	 */
+	public Map<String,Integer> getRunStatMap();
+
+   Map key说明
+   total:累计接收异步工作数
+execute:执行异步工作数
+callback:执行回调数
+}}}
+{{{	
+	/**
+	 *  获取运行状态字符信息
+	 * @return
+	 */
+	public String getRunStatInfo();
+
+}}}
+7. 调用基于Spring Bean的异步方法
+
+1.applicationContext.xml 加入
+{{{
+<bean id="springBeanUtil" class="com.googlecode.asyn4j.spring.AsynSpringUtil">
+	</bean>
+}}}
+	
+
+使用下列方法添加异步工作
+{{{
+public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack);
+
+public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack,int weight);
+}}}
+
+
+8．创建基于Spring 的依赖Bean
+
+asynService spring bean 工厂
+{{{
+   <bean id="asynService" class="com.googlecode.asyn4j.spring.AsynServiceFactoryBean">
+		
+   </bean>
+}}}
+
+
+9.注意
+查找异步工作目标方法时,无法区分方法同名的并且参数是继承关系的方法.
+  
+    
+
