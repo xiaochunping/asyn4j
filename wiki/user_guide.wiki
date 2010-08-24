@@ -215,8 +215,8 @@ AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序�
 
    Map key说明
    total:累计接收异步工作数
-execute:执行异步工作数
-callback:执行回调数
+   execute:执行异步工作数
+   callback:执行回调数
 }}}
 {{{	
 	/**
