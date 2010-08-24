@@ -12,11 +12,12 @@
 			// 添加加异步工作- TargetService 的 test 方法 ，方法参数 asynej+ i
 			asynService.addWork(new Object[] { "asyn4j" + i },
 					TargetService.class, "test", new TargetBack());
-		}
-	}}}
+		}}
+}}}
 
 回调方法
-{{{//回调需继承AsynCallBack抽象类
+{{{
+//回调需继承AsynCallBack抽象类
 public class TargetBack extends AsynCallBack {
 
 	@Override
@@ -183,4 +184,3 @@ asynService spring bean 工厂
 查找异步工作目标方法时,无法区分方法同名的并且参数是继承关系的方法.
   
     
-
