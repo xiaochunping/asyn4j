@@ -2,7 +2,7 @@ package com.googlecode.asyn4j.spring;
 
 import org.springframework.beans.factory.FactoryBean;
 
-import com.googlecode.asyn4j.core.WorkQueueFullHandler;
+import com.googlecode.asyn4j.core.handler.WorkQueueFullHandler;
 import com.googlecode.asyn4j.service.AsynService;
 import com.googlecode.asyn4j.service.AsynServiceImpl;
 
