@@ -1,4 +1,4 @@
-package com.googlecode.asyn4j.core;
+package com.googlecode.asyn4j.core.handler;
 
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;

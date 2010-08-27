@@ -1,4 +1,4 @@
-package com.googlecode.asyn4j.core;
+package com.googlecode.asyn4j.core.handler;
 
 import com.googlecode.asyn4j.core.work.AsynWork;
 import com.googlecode.asyn4j.service.AsynService;
@@ -8,7 +8,7 @@ import com.googlecode.asyn4j.service.AsynService;
  * @author pan_java
  *
  */
-public abstract class WorkQueueFullHandler {
+public abstract class WorkQueueFullHandler implements AsynHandler{
 	
 	protected AsynService  asynService;
 	
