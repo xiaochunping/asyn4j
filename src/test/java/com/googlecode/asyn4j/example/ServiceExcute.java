@@ -33,7 +33,6 @@ public class ServiceExcute {
 	}
 
 	@Test
-	@Ignore
 	public void testExecut2() throws InterruptedException {
 		AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100,
 				100);
@@ -41,7 +40,7 @@ public class ServiceExcute {
 		anycService.init();
 		for (long i = 0; i < 1000; i++) {
 			anycService.addWork(new Object[] { "panxiuyan" + i },
-					TestBean.class, "myName", new MyHasResult());
+					TestBean.class, "myName");
 
 			if (i % 99 == 0) {
 				System.out.println(anycService.getRunStatInfo());
@@ -64,6 +63,7 @@ public class ServiceExcute {
 
 	}
 	@Test
+	@Ignore
 	public void testExecutSpring() throws InterruptedException {
 		TestMain testMain = (TestMain)context.getBean("testMain");
 		testMain.maintest();
