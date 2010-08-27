@@ -11,7 +11,7 @@
   <packaging>jar</packaging>
 
   <name>asyn4j</name>
-  <url>http://maven.apache.org</url>
+  <url>http://asyn4j.googlecode.com</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,21 +29,13 @@
       <scope>test</scope>
     </dependency>
 	
-	 <dependency>
-      <groupId>org.easymock</groupId>
-      <artifactId>easymock</artifactId>
-      <version>3.0</version>
-      <scope>test</scope>
+   <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1.1</version>
     </dependency>
 	
-	  <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.4</version>
-             <scope>test</scope>
-    </dependency>
-    
-     <dependency>
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
       <version>2.5.6</version>
@@ -55,18 +47,6 @@
       <version>2.5.6</version>
     </dependency>
 	   
-	   
-	 <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>1.8.3</version>
-   </dependency>
-   
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>1.4</version>
-   </dependency>
    
 
    

@@ -12,7 +12,7 @@ public class TestMain {
 	
 	public void maintest(){
 		for(int i=0;i<10000;i++){
-			asynService.addWorkWithSpring(new Object[] { "panxiuyan" + i }, "testBean", "myName", null);
+			asynService.addWorkWithSpring(new Object[] { "panxiuyan" + i }, "testBean", "myName");
 		}
 	}
 
