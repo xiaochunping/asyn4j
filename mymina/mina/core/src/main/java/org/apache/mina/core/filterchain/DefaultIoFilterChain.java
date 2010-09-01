@@ -418,6 +418,7 @@ public class DefaultIoFilterChain implements IoFilterChain {
 
     public void fireMessageReceived(Object message) {
         if (message instanceof IoBuffer) {
+            //统计session 状态信息
             session.increaseReadBytes(((IoBuffer) message).remaining(), System
                     .currentTimeMillis());
         }

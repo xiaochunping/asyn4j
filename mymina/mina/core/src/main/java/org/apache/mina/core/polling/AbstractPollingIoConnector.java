@@ -314,7 +314,9 @@ public abstract class AbstractPollingIoConnector<T extends AbstractIoSession, H>
         H handle = null;
         boolean success = false;
         try {
+            //获取管道
             handle = newHandle(localAddress);
+            //建立连接
             if (connect(handle, remoteAddress)) {
                 ConnectFuture future = new DefaultConnectFuture();
                 T session = newSession(processor, handle);
@@ -340,6 +342,7 @@ public abstract class AbstractPollingIoConnector<T extends AbstractIoSession, H>
 
         ConnectionRequest request = new ConnectionRequest(handle, sessionInitializer);
         connectQueue.add(request);
+        //建立连接
         startupWorker();
         wakeup();
 
@@ -370,6 +373,7 @@ public abstract class AbstractPollingIoConnector<T extends AbstractIoSession, H>
 
             H handle = req.handle;
             try {
+                //注册连接管道
                 register(handle, req);
                 nHandles ++;
             } catch (Exception e) {
@@ -424,7 +428,8 @@ public abstract class AbstractPollingIoConnector<T extends AbstractIoSession, H>
             
             boolean success = false;
             try {
-                if (finishConnect(handle)) {
+                if (finishConnect(handle)) {//确认连接是否完成
+                    //新建Session关联
                     T session = newSession(processor, handle);
                     initSession(session, connectionRequest, connectionRequest.getSessionInitializer());
                     // Forward the remaining process to the IoProcessor.

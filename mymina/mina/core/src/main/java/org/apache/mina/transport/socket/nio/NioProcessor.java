@@ -55,6 +55,7 @@ public final class NioProcessor extends AbstractPollingIoProcessor<NioSession> {
         super(executor);
         
         try {
+            //´ò¿ªÑ¡ÔñÆ÷
             // Open a new selector
             selector = Selector.open();
         } catch (IOException e) {

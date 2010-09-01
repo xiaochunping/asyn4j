@@ -522,6 +522,7 @@ public abstract class AbstractPollingIoProcessor<T extends AbstractIoSession>
         boolean registered = false;
 
         try {
+            //设置读取Key
             init(session);
             registered = true;
 
@@ -663,12 +664,12 @@ public abstract class AbstractPollingIoProcessor<T extends AbstractIoSession>
      * Deal with session ready for the read or write operations, or both.
      */
     private void process(T session) {
-        // Process Reads
+        // Process Reads--读
         if (isReadable(session) && !session.isReadSuspended()) {
             read(session);
         }
 
-        // Process writes
+        // Process writes--写
         if (isWritable(session) && !session.isWriteSuspended()) {
             // add the session to the queue, if it's not already there
             if (session.setScheduledForFlush(true)) {
@@ -688,7 +689,7 @@ public abstract class AbstractPollingIoProcessor<T extends AbstractIoSession>
         try {
             int readBytes = 0;
             int ret;
-
+            //读取流
             try {
                 if (hasFragmentation) {
                     
@@ -712,6 +713,7 @@ public abstract class AbstractPollingIoProcessor<T extends AbstractIoSession>
 
             if (readBytes > 0) {
                 IoFilterChain filterChain = session.getFilterChain();
+                //处理执行对应的方法
                 filterChain.fireMessageReceived(buf);
                 buf = null;
 
@@ -774,7 +776,7 @@ public abstract class AbstractPollingIoProcessor<T extends AbstractIoSession>
             switch (state) {
                 case OPENED:
                     try {
-                        boolean flushedAll = flushNow(session, currentTime);
+                        boolean flushedAll = flushNow(session, currentTime);//写操作
                         
                         if (flushedAll
                                 && !session.getWriteRequestQueue().isEmpty(session)
@@ -924,7 +926,7 @@ public abstract class AbstractPollingIoProcessor<T extends AbstractIoSession>
             } else {
                 length = buf.remaining();
             }
-            
+            //写
             localWrittenBytes = write(session, buf, length);
         }
 
@@ -1119,7 +1121,7 @@ public abstract class AbstractPollingIoProcessor<T extends AbstractIoSession>
 
                     // Write the pending requests
                     long currentTime = System.currentTimeMillis();
-                    flush(currentTime);
+                    flush(currentTime);//写操作
                     
                     // And manage removed sessions
                     nSessions -= removeSessions();
