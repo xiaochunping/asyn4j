@@ -179,7 +179,9 @@ public abstract class AbstractIoService implements IoService {
 
         // Create the listeners, and add a first listener : a activation listener
         // for this service, which will give information on the service state.
+        //监听器
         listeners = new IoServiceListenerSupport(this);
+        //状态信息
         listeners.add(serviceActivationListener);
 
         // Stores the given session configuration
@@ -439,6 +441,7 @@ public abstract class AbstractIoService implements IoService {
         // the attributeMap at last is to make sure all session properties
         // such as remoteAddress are provided to IoSessionDataStructureFactory.
         try {
+            //设置属性Map
             ((AbstractIoSession) session).setAttributeMap(session.getService()
                     .getSessionDataStructureFactory().getAttributeMap(session));
         } catch (IoSessionInitializationException e) {

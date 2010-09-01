@@ -129,6 +129,7 @@ public class SimpleIoProcessorPool<T extends AbstractIoSession> implements IoPro
      * @param executor The {@link Executor}
      */
     public SimpleIoProcessorPool(Class<? extends IoProcessor<T>> processorType, Executor executor) {
+        //缺省 DEFAULT_SIZE NioProcessor数量为Cpu 数 + 1
         this(processorType, executor, DEFAULT_SIZE);
     }
 
@@ -171,6 +172,7 @@ public class SimpleIoProcessorPool<T extends AbstractIoSession> implements IoPro
         try {
             // We create at least one processor
             try {
+                //通过不同的构造函数初始化 IoProcessor;
                 try {
                 	processorConstructor = processorType.getConstructor(ExecutorService.class);
                     pool[0] = processorConstructor.newInstance(this.executor);
@@ -179,6 +181,7 @@ public class SimpleIoProcessorPool<T extends AbstractIoSession> implements IoPro
                 }
 
                 try {
+                    //NioProcessor 有这个构造函数
                     processorConstructor = processorType.getConstructor(Executor.class);
                     pool[0] = processorConstructor.newInstance(this.executor);
                 } catch (NoSuchMethodException e) {
@@ -216,7 +219,7 @@ public class SimpleIoProcessorPool<T extends AbstractIoSession> implements IoPro
             // Constructor found now use it for all subsequent instantiations
             for (int i = 1; i < pool.length; i++) {
                 try {
-                    if (usesExecutorArg) {
+                    if (usesExecutorArg) {//创建多个NioProcessor
                         pool[i] = processorConstructor.newInstance(this.executor);
                     } else {
                         pool[i] = processorConstructor.newInstance();

@@ -186,6 +186,7 @@ public abstract class AbstractPollingIoAcceptor<T extends AbstractIoSession, H>
     private AbstractPollingIoAcceptor(IoSessionConfig sessionConfig,
             Executor executor, IoProcessor<T> processor,
             boolean createdProcessor) {
+        //监听器初始化
         super(sessionConfig, executor);
 
         if (processor == null) {
@@ -196,7 +197,7 @@ public abstract class AbstractPollingIoAcceptor<T extends AbstractIoSession, H>
         this.createdProcessor = createdProcessor;
 
         try {
-            // Initialize the selector
+            // Initialize the selector--初始化选择器
             init();
             
             // The selector is now ready, we can switch the
@@ -308,6 +309,7 @@ public abstract class AbstractPollingIoAcceptor<T extends AbstractIoSession, H>
 
         // adds the Registration request to the queue for the Workers
         // to handle
+        //添加请求到注册列表
         registerQueue.add(request);
 
         // creates the Acceptor instance and has the local
@@ -359,6 +361,7 @@ public abstract class AbstractPollingIoAcceptor<T extends AbstractIoSession, H>
         synchronized (lock) {
             if (acceptor == null) {
                 acceptor = new Acceptor();
+                //开启等待Acceptor
                 executeWorker(acceptor);
             }
         }
@@ -389,7 +392,7 @@ public abstract class AbstractPollingIoAcceptor<T extends AbstractIoSession, H>
      * It's a thread accepting incoming connections from clients.
      * The loop is stopped when all the bound handlers are unbound.
      */
-    private class Acceptor implements Runnable {
+    private class Acceptor implements Runnable {//连接器
         public void run() {
             int nHandles = 0;
 
@@ -487,6 +490,7 @@ public abstract class AbstractPollingIoAcceptor<T extends AbstractIoSession, H>
                     break;
                 }
 
+                //初始化Session
                 initSession(session, null, null);
 
                 // add the session to the SocketIoProcessor
@@ -523,7 +527,9 @@ public abstract class AbstractPollingIoAcceptor<T extends AbstractIoSession, H>
             try {
                 // Process all the addresses
                 for (SocketAddress a : localAddresses) {
+                    //打开管道
                     H handle = open(a);
+                    //封装到对应的Map中
                     newHandles.put(localAddress(handle), handle);
                 }
 
@@ -539,7 +545,7 @@ public abstract class AbstractPollingIoAcceptor<T extends AbstractIoSession, H>
                 future.setException(e);
             } finally {
                 // Roll back if failed to bind all addresses.
-                if (future.getException() != null) {
+                if (future.getException() != null) {//如果发现异常,处理
                     for (H handle : newHandles.values()) {
                         try {
                             close(handle);

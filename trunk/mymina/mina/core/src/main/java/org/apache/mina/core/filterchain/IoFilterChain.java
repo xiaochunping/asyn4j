@@ -321,7 +321,7 @@ public interface IoFilterChain {
      *
      * @author <a href="http://mina.apache.org">Apache MINA Project</a>
      */
-    public interface Entry {
+    public interface Entry {//过滤器实体接口
         /**
          * Returns the name of the filter.
          */

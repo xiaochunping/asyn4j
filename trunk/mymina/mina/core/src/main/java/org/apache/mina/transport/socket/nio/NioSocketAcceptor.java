@@ -67,7 +67,7 @@ public final class NioSocketAcceptor
     	
     	super(new DefaultSocketSessionConfig(), NioProcessor.class);
         
-        
+        //初始化前面设置在AbstractIoService 中的  sessionConfig
         ((DefaultSocketSessionConfig) getSessionConfig()).init(this);
     }
 
