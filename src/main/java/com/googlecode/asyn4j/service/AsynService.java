@@ -2,6 +2,7 @@ package com.googlecode.asyn4j.service;
 
 import java.util.Map;
 
+import com.googlecode.asyn4j.core.WorkWeight;
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.core.handler.AsynServiceCloseHandler;
 import com.googlecode.asyn4j.core.handler.ErrorAsynWorkHandler;
@@ -59,7 +60,7 @@ public interface AsynService {
      * @param method －－ 对应方法
      * @param asynCallBack －－ 回调
      */
-    public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack, int weight);
+    public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack, WorkWeight weight);
 
     /**
      * 添加异步工作
@@ -70,7 +71,7 @@ public interface AsynService {
      * @param asynCallBack －－回调
      * @param weight －－ 异步工作权重
      */
-    public void addWork(Object[] params, Object tagerObject, String method, AsynCallBack asynCallBack, int weight);
+    public void addWork(Object[] params, Object tagerObject, String method, AsynCallBack asynCallBack, WorkWeight weight);
 
     /**
      * 添加异步工作依赖Spring Bean
@@ -100,7 +101,7 @@ public interface AsynService {
      * @param asynCallBack －－回调
      * @param weight －－ 异步工作权重
      */
-    public void addWorkWithSpring(Object[] params, String target, String method, AsynCallBack asynCallBack, int weight);
+    public void addWorkWithSpring(Object[] params, String target, String method, AsynCallBack asynCallBack, WorkWeight weight);
 
     /**
      * 添加异步工作

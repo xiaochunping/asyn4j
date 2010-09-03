@@ -18,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.asyn4j.core.AsynWorkExecute;
+import com.googlecode.asyn4j.core.WorkWeight;
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.core.callback.AsynCallBackService;
 import com.googlecode.asyn4j.core.callback.AsynCallBackServiceImpl;
@@ -39,7 +40,7 @@ public class AsynServiceImpl implements AsynService {
     private static AsynWorkCachedService       anycWorkCachedService  = null;
 
     // asyn work default work weight
-    private static final int                   DEFAULT_WORK_WEIGHT    = 5;
+    private static final WorkWeight            DEFAULT_WORK_WEIGHT    = WorkWeight.MIDDLE;
 
     private final static int                   CPU_NUMBER             = Runtime.getRuntime().availableProcessors();
 
@@ -132,7 +133,8 @@ public class AsynServiceImpl implements AsynService {
             resultBlockingQueue = new LinkedBlockingQueue<AsynCallBack>();
 
             // start work thread
-            asynWorkExecute = new AsynWorkExecute(anycWorkCachedService, workExecutor, resultBlockingQueue,errorAsynWorkHandler);
+            asynWorkExecute = new AsynWorkExecute(anycWorkCachedService, workExecutor, resultBlockingQueue,
+                    errorAsynWorkHandler);
             new Thread(asynWorkExecute).start();
 
             // start callback thread
@@ -207,7 +209,7 @@ public class AsynServiceImpl implements AsynService {
     }
 
     @Override
-    public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack, int weight) {
+    public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack, WorkWeight weight) {
         Object target = null;
 
         try {
@@ -224,29 +226,30 @@ public class AsynServiceImpl implements AsynService {
 
         AsynWork anycWork = new AsynWorkEntity(target, method, params, asynCallBack);
 
-        anycWork.setWeight(weight);
+        anycWork.setWeight(weight.getValue());
 
         addAsynWork(anycWork);
 
     }
 
     @Override
-    public void addWork(Object[] params, Object tagerObject, String method, AsynCallBack asynCallBack, int weight) {
+    public void addWork(Object[] params, Object tagerObject, String method, AsynCallBack asynCallBack, WorkWeight weight) {
         if (tagerObject == null) {
             throw new IllegalArgumentException("tager object is null");
         }
         AsynWork anycWork = new AsynWorkEntity(tagerObject, method, params, asynCallBack);
 
-        anycWork.setWeight(weight);
+        anycWork.setWeight(weight.getValue());
 
         addAsynWork(anycWork);
 
     }
 
     @Override
-    public void addWorkWithSpring(Object[] params, String target, String method, AsynCallBack asynCallBack, int weight) {
+    public void addWorkWithSpring(Object[] params, String target, String method, AsynCallBack asynCallBack,
+                                  WorkWeight weight) {
 
-        if (target == null || method == null || weight < 0) {
+        if (target == null || method == null) {
             throw new IllegalArgumentException("target name is null or  target method name is null or weight less 0");
         }
         // get spring bean
@@ -257,7 +260,7 @@ public class AsynServiceImpl implements AsynService {
 
         AsynWork anycWork = new AsynWorkEntity(bean, method, params, asynCallBack);
 
-        anycWork.setWeight(weight);
+        anycWork.setWeight(weight.getValue());
 
         addAsynWork(anycWork);
 
@@ -277,7 +280,7 @@ public class AsynServiceImpl implements AsynService {
             throw new IllegalArgumentException("asynWork is null");
         }
         if (asynWork.getWeight() <= 0) {
-            asynWork.setWeight(DEFAULT_WORK_WEIGHT);
+            asynWork.setWeight(DEFAULT_WORK_WEIGHT.getValue());
         }
         anycWorkCachedService.addWork(asynWork);
     }
@@ -313,6 +316,7 @@ public class AsynServiceImpl implements AsynService {
         this.workQueueFullHandler = workQueueFullHandler;
         this.workQueueFullHandler.setAsynService(this);
     }
+
     @Override
     public void setCloseHander(AsynServiceCloseHandler closeHander) {
         if (run)
@@ -321,6 +325,7 @@ public class AsynServiceImpl implements AsynService {
             throw new IllegalArgumentException("closeHander is null");
         this.closeHander = closeHander;
     }
+
     @Override
     public void setErrorAsynWorkHandler(ErrorAsynWorkHandler errorAsynWorkHandler) {
         if (run)
