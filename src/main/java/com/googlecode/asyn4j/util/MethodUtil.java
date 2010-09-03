@@ -10,7 +10,7 @@ import java.util.List;
  * @author pan_java
  * 
  */
-public class MethodUtil {
+public final class MethodUtil {
 
 	/**
 	 * 

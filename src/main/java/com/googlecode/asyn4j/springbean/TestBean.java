@@ -9,9 +9,7 @@ public class TestBean {
 	}
 
 	public void myName(String name) {
-	    int a =0,b= 0;
-	    System.out.println(a/b);
-		System.out.println(name);
+	    System.out.println(name);
 	}
 
 	public void myName(String fn, String la) {
