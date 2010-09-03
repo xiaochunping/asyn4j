@@ -18,7 +18,7 @@ package com.googlecode.asyn4j.core;
 /**
  * TODO Comment of WorkWeight
  * 
- * @author yuncheng
+ * @author pan_java
  * @version WorkWeight.java 2010-9-3 下午06:19:21
  */
 public enum WorkWeight {

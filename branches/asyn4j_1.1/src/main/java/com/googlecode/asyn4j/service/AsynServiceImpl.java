@@ -2,15 +2,10 @@ package com.googlecode.asyn4j.service;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -20,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import com.googlecode.asyn4j.core.AsynWorkExecute;
 import com.googlecode.asyn4j.core.WorkWeight;
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
-import com.googlecode.asyn4j.core.callback.AsynCallBackService;
 import com.googlecode.asyn4j.core.callback.AsynCallBackServiceImpl;
 import com.googlecode.asyn4j.core.handler.AsynServiceCloseHandler;
 import com.googlecode.asyn4j.core.handler.ErrorAsynWorkHandler;
