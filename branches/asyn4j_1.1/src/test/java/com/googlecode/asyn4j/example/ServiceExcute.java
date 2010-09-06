@@ -29,7 +29,7 @@ public class ServiceExcute {
 
     @Before
     public void setUp() {
-       // context = new FileSystemXmlApplicationContext("D:/java/asyn4j/src/main/java/applicationContext.xml");
+        context = new FileSystemXmlApplicationContext("D:/java/asyn4j/src/main/java/applicationContext.xml");
 
     }
 
@@ -86,6 +86,7 @@ public class ServiceExcute {
     }
 
     @Test
+    @Ignore
     public void testErrorHandler() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
@@ -100,6 +101,13 @@ public class ServiceExcute {
             }
         }
 
+    }
+
+    @Test
+    public void testSpringErrorHandler() throws InterruptedException {
+        TestMain testMain = (TestMain) context.getBean("testMain");
+        testMain.maintest();
+        Thread.sleep(Long.MAX_VALUE);
     }
 
     public static class MyResult extends AsynCallBack {
