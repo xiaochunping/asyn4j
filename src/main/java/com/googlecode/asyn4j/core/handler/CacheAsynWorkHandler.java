@@ -18,6 +18,10 @@ public final class CacheAsynWorkHandler extends WorkQueueFullHandler {
     private final static Log log = LogFactory.getLog(CacheAsynWorkHandler.class);
 
 	private BlockingQueue<AsynWork> cacheLink = null;
+	
+	public CacheAsynWorkHandler(){
+	    cacheLink = new ArrayBlockingQueue<AsynWork>(300);
+	}
 
 	public CacheAsynWorkHandler(int maxLength) {
 		cacheLink = new ArrayBlockingQueue<AsynWork>(maxLength);

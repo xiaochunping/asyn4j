@@ -9,6 +9,7 @@ public class TestBean {
 	}
 
 	public void myName(String name) {
+	    int i = 1/0;
 	    System.out.println(name);
 	}
 
