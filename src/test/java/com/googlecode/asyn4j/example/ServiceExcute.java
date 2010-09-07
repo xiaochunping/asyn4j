@@ -29,8 +29,7 @@ public class ServiceExcute {
 
     @Before
     public void setUp() {
-        context = new FileSystemXmlApplicationContext("D:/java/asyn4j/src/main/java/applicationContext.xml");
-
+        context = new FileSystemXmlApplicationContext("D:/java/asyn4j_1.1/src/main/java/applicationContext.xml");
     }
 
     @Test
@@ -39,9 +38,8 @@ public class ServiceExcute {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
         anycService.init();
-        for (long i = 0; i < 10; i++) {
+        for (long i = 0; i < 100000000; i++) {
             anycService.addWork(new Object[] { "panxiuyan" + i }, TestBean.class, "myName");
-
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());
             }

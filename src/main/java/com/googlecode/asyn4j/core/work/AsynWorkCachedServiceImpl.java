@@ -48,6 +48,7 @@ public class AsynWorkCachedServiceImpl implements AsynWorkCachedService {
         this.workQueue = workQueue;
         this.addWorkWaitTime = addWorkWaitTime;
         this.maxCacheWork = maxCacheWork;
+        this.workQueueFullHandler = workQueueFullHandler;
     }
 
     @Override
