@@ -120,8 +120,8 @@ public class AsynServiceImpl implements AsynService {
             workQueue = new PriorityBlockingQueue<AsynWork>();
 
             // init work execute server
-            anycWorkCachedService = new AsynWorkCachedServiceImpl(maxCacheWork, addWorkWaitTime,
-                    this.workQueueFullHandler, workQueue);
+            anycWorkCachedService = new AsynWorkCachedServiceImpl(maxCacheWork, addWorkWaitTime, workQueueFullHandler,
+                    workQueue);
 
             // init work execute queue
             resultBlockingQueue = new LinkedBlockingQueue<AsynCallBack>();

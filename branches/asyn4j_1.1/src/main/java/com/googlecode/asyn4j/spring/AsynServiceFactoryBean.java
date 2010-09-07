@@ -1,7 +1,6 @@
 package com.googlecode.asyn4j.spring;
 
 import java.lang.reflect.Constructor;
-import java.util.logging.Logger;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,11 +30,11 @@ public class AsynServiceFactoryBean implements FactoryBean {
     // callback thread pool size
     private int              callbackThreadNum = CPU_NUMBER / 2;
 
-    private String           workQueueFullHandler;
+    private WorkQueueFullHandler           workQueueFullHandler;
 
-    private String           errorAsynWorkHandler;
+    private ErrorAsynWorkHandler           errorAsynWorkHandler;
 
-    private String           asynServiceCloseHandler;
+    private AsynServiceCloseHandler           asynServiceCloseHandler;
 
     public void setMaxCacheWork(int maxCacheWork) {
         this.maxCacheWork = maxCacheWork;
@@ -52,16 +51,28 @@ public class AsynServiceFactoryBean implements FactoryBean {
     public void setCallbackThreadNum(int callbackThreadNum) {
         this.callbackThreadNum = callbackThreadNum;
     }
+    
+   public WorkQueueFullHandler getWorkQueueFullHandler() {
+        return workQueueFullHandler;
+    }
 
-    public void setWorkQueueFullHandler(String workQueueFullHandler) {
+    public void setWorkQueueFullHandler(WorkQueueFullHandler workQueueFullHandler) {
         this.workQueueFullHandler = workQueueFullHandler;
     }
-    
-    public void setErrorAsynWorkHandler(String errorAsynWorkHandler) {
+
+    public ErrorAsynWorkHandler getErrorAsynWorkHandler() {
+        return errorAsynWorkHandler;
+    }
+
+    public void setErrorAsynWorkHandler(ErrorAsynWorkHandler errorAsynWorkHandler) {
         this.errorAsynWorkHandler = errorAsynWorkHandler;
     }
 
-    public void setAsynServiceCloseHandler(String asynServiceCloseHandler) {
+    public AsynServiceCloseHandler getAsynServiceCloseHandler() {
+        return asynServiceCloseHandler;
+    }
+
+    public void setAsynServiceCloseHandler(AsynServiceCloseHandler asynServiceCloseHandler) {
         this.asynServiceCloseHandler = asynServiceCloseHandler;
     }
 
@@ -71,18 +82,17 @@ public class AsynServiceFactoryBean implements FactoryBean {
                 callbackThreadNum);
         //set some handler
         if (workQueueFullHandler != null) {
-            asynService.setWorkQueueFullHandler((WorkQueueFullHandler) newObject(workQueueFullHandler));
+            asynService.setWorkQueueFullHandler(workQueueFullHandler);
         }
         if (errorAsynWorkHandler != null) {
-            asynService.setErrorAsynWorkHandler((ErrorAsynWorkHandler) newObject(errorAsynWorkHandler));
+            asynService.setErrorAsynWorkHandler(errorAsynWorkHandler);
         }
         if (asynServiceCloseHandler != null) {
-            asynService.setCloseHander((AsynServiceCloseHandler) newObject(asynServiceCloseHandler));
+            asynService.setCloseHander(asynServiceCloseHandler);
         }
         asynService.init();
         return asynService;
-
-    }
+   }
 
     @Override
     public Class getObjectType() {

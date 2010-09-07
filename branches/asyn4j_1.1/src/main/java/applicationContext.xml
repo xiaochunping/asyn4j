@@ -24,10 +24,14 @@
 	
    <bean id="asynService" class="com.googlecode.asyn4j.spring.AsynServiceFactoryBean">
 	    <property name="maxCacheWork" value="100"></property>
-		<property name="errorAsynWorkHandler">com.googlecode.asyn4j.core.handler.DefaultErrorAsynWorkHandler</property>
-		<property name="workQueueFullHandler">com.googlecode.asyn4j.core.handler.CacheAsynWorkHandler.java</property>
+		<property name="errorAsynWorkHandler">
+			<bean class="com.googlecode.asyn4j.core.handler.DefaultErrorAsynWorkHandler"/>
+	    </property>
+		<property name="workQueueFullHandler">
+			<bean class="com.googlecode.asyn4j.core.handler.CacheAsynWorkHandler"/>
+	   </property>
    </bean>
-   
+
    <bean id="testMain" class="com.googlecode.asyn4j.springbean.TestMain">
 		<property name="asynService">
 			 <ref local="asynService"></ref>
