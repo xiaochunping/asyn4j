@@ -136,15 +136,16 @@ AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100,
 
 ===4.异步工作优级===
 {{{
-默认优先级为5  ,相关API
+分成三个等级WorkWeight.LOW,WorkWeight.MIDDLE, WorkWeight.HIGH
+默认优先级为WorkWeight.MIDDLE  ,相关API
 //目标对象为指定实例
-public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, int weight);
+public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, WorkWeight weight);
 
 //目标对象为class
-public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack,int weight);
+public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack,WorkWeight weight);
 
 //Spring对应
-public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack,int weight);
+public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack,WorkWeight weight);
 
 }}}
 
@@ -208,7 +209,7 @@ AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序�
 	 * @param method  －－ 对应方法 
 	 * @param asynCallBack --回调
 	 */
-	public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack,int weight);
+	public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack,WorkWeight weight);
 	
 	/**
 	 * 添加异步工作
@@ -218,7 +219,7 @@ AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序�
 	 * @param asynCallBack --回调
       *@param weight --   工作权重 默认 5
 	 */
-	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, int weight);
+	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, WorkWeight weight);
 	
 /**
 	 * 添加异步工作依赖Spring Bean
@@ -237,7 +238,7 @@ AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序�
 	  *@param weight --   工作权重 默认 5
 	 * 
 	 */
-	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack,int weight);
+	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack,WorkWeight weight);
 	
 /**
 	 *  添加异步工作
@@ -291,7 +292,18 @@ public void addWorkWithSpring(Object[] params,String target,String method,AsynCa
 asynService spring bean 工厂
 {{{
    <bean id="asynService" class="com.googlecode.asyn4j.spring.AsynServiceFactoryBean">
-		
+	    <!--设置自定义相关参数-->
+	    <property name="maxCacheWork" value="100"></property>
+		<property name="addWorkWaitTime" value="2000"></property>
+		<property name="workThreadNum" value="3"></property>
+		<property name="callbackThreadNum" value="2"></property>
+		<!--添加相关处理器-->
+		<property name="errorAsynWorkHandler">
+			<bean class="com.googlecode.asyn4j.core.handler.DefaultErrorAsynWorkHandler"/>
+	    </property>
+		<property name="workQueueFullHandler">
+			<bean class="com.googlecode.asyn4j.core.handler.CacheAsynWorkHandler"/>
+	   </property>
    </bean>
 }}}
 
