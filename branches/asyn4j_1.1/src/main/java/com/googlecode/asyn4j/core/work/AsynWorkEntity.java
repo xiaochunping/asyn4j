@@ -1,13 +1,10 @@
 package com.googlecode.asyn4j.core.work;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
-import com.googlecode.asyn4j.spring.AsynSpringUtil;
 import com.googlecode.asyn4j.util.MethodUtil;
 
 /**
