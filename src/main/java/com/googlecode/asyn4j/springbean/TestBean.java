@@ -1,5 +1,6 @@
 package com.googlecode.asyn4j.springbean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestBean {
@@ -20,7 +21,7 @@ public class TestBean {
 		return fn + "  " + la + "  age :" + a;
 	}
 
-	public void myName(List list) {
+	public void myName(ArrayList list) {
 		if (list != null) {
 			System.out.println(list.size());
 		}

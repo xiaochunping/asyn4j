@@ -29,17 +29,16 @@ public class ServiceExcute {
 
     @Before
     public void setUp() {
-        context = new FileSystemXmlApplicationContext("D:/java/asyn4j_1.1/src/main/java/applicationContext.xml");
+       // context = new FileSystemXmlApplicationContext("D:/java/asyn4j_1.1/src/main/java/applicationContext.xml");
     }
 
     @Test
-    @Ignore
     public void testExecut2() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
         anycService.init();
         for (long i = 0; i < 100000000; i++) {
-            anycService.addWork(new Object[] { "panxiuyan" + i }, TestBean.class, "myName");
+            anycService.addWork(new Object[] { "panxiuyan" + i }, TestBean.class, "myName",new MyResult());
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());
             }
@@ -52,7 +51,7 @@ public class ServiceExcute {
     public void testExecut3() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService();
         anycService.init();
-        List list = new ArrayList();
+        ArrayList list = new ArrayList();
         anycService.addWork(new Object[] { list }, TestBean.class, "myName", new MyResult());
         Thread.sleep(Long.MAX_VALUE);
 
@@ -102,6 +101,7 @@ public class ServiceExcute {
     }
 
     @Test
+    @Ignore
     public void testSpringErrorHandler() throws InterruptedException {
         TestMain testMain = (TestMain) context.getBean("testMain");
         testMain.maintest();

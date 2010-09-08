@@ -39,6 +39,7 @@ public final class MethodUtil {
 		if (mList.size() == 1)
 			return mList.get(0);
 
+		Method result = null;
 		for (Method m : mList) {
 			Class[] classes = m.getParameterTypes();
 			if (classes.length == 0 && (pararm == null || pararm.length == 0))
@@ -49,19 +50,23 @@ public final class MethodUtil {
 			if (classes.length != pararm.length) {
 				continue;
 			}
+			boolean flag = true;
 			for (int i = 0; i < classes.length; i++) {
 				Class clzss = classes[i];
 				Class paramClzss = pararm[i].getClass();
 				if (!clzss.toString().equals(paramClzss.toString())) {
+				    flag =false;
 					break;
 				}
-
+            }
+			
+			if(flag){
+			    result = m;
+			    break;
 			}
-			return m;
-
 		}
 
-		return null;
+		return result;
 
 	}
 

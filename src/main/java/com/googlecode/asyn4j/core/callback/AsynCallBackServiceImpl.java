@@ -1,16 +1,11 @@
 package com.googlecode.asyn4j.core.callback;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.googlecode.asyn4j.core.CachedService;
 import com.googlecode.asyn4j.core.work.AsynWorkCachedServiceImpl;
 
 /**
