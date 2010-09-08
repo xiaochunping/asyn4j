@@ -12,6 +12,12 @@
 	public static void main(String[] args) {
 		// 初始化异步工作服务
 		AsynService asynService =  AsynServiceImpl.getService(300, 3000L, 3, 2);
+                //异步工作缓冲处理器
+                anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
+                //服务关闭处理器
+                anycService.setCloseHander(new DefauleCloseHandler());
+                //异步工作执行异常处理器
+                anycService.setErrorAsynWorkHandler(new DefaultErrorAsynWorkHandler());
 		// 启动服务
 		asynService.init();
 		// 异步回调对象
