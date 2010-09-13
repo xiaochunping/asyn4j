@@ -9,147 +9,149 @@ import com.googlecode.asyn4j.core.handler.ErrorAsynWorkHandler;
 import com.googlecode.asyn4j.core.handler.WorkQueueFullHandler;
 import com.googlecode.asyn4j.core.work.AsynWork;
 
+
+
 /**
  * @author pan_java
  */
 public interface AsynService {
 
     /**
-     * 添加异步工作
+     * add asyn work
      * 
-     * @param params －－ 参数
-     * @param clzss －－ 目标类ClASS
-     * @param method －－ 对应方法
+     * @param params －－ params
+     * @param clzss －－ traget ClASS
+     * @param method －－ target method name
      */
     public void addWork(Object[] params, Class clzss, String method);
 
     /**
-     * 添加异步工作
+     *  add asyn work
      * 
-     * @param params －－ 参数
-     * @param clzss －－ 目标类ClASS
-     * @param method －－ 对应方法
-     * @param anycResult --回调
+     * @param params －－ params
+     * @param clzss －－ traget ClASS
+     * @param method －－target method name
+     * @param anycResult -- callback method
      */
     public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack);
 
     /**
-     * 添加异步工作
+     * add asyn work
      * 
-     * @param params －－ 参数
-     * @param clzss －－ 目标类对象
-     * @param method －－ 对应方法
+     * @param params －－ params
+     * @param clzss －－ traget ClASS
+     * @param method －－target method name
      */
     public void addWork(Object[] params, Object tagerObject, String method);
 
     /**
-     * 添加异步工作
+     * add asyn work
      * 
-     * @param params －－ 参数
-     * @param clzss －－ 目标类对象
-     * @param method －－ 对应方法
-     * @param asynCallBack --回调
+     * @param params －－ params
+     * @param clzss －－ traget ClASS
+     * @param method －－ target method name
+     * @param asynCallBack --callback method
      */
     public void addWork(Object[] params, Object tagerObject, String method, AsynCallBack asynCallBack);
 
     /**
-     * 添加异步工作
+     * add asyn work
      * 
-     * @param params －－ 参数
-     * @param clzss －－ 目标类ClASS
-     * @param method －－ 对应方法
-     * @param asynCallBack －－ 回调
+     * @param params －－ params
+     * @param clzss －－ traget ClASS
+     * @param method －－  target method name
+     * @param asynCallBack －－ callback method
      */
     public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack, WorkWeight weight);
 
     /**
-     * 添加异步工作
+     * add asyn work
      * 
-     * @param params －－ 参数
-     * @param clzss －－ 目标类对象
-     * @param method －－ 对应方法
-     * @param asynCallBack －－回调
-     * @param weight －－ 异步工作权重
+     * @param params －－ params
+     * @param clzss －－ traget Object
+     * @param method －－ target method name
+     * @param asynCallBack －－ callback method
+     * @param weight －－ work weight
      */
     public void addWork(Object[] params, Object tagerObject, String method, AsynCallBack asynCallBack, WorkWeight weight);
 
     /**
-     * 添加异步工作依赖Spring Bean
+     * add asyn work with Spring Bean
      * 
-     * @param params －－ 参数
-     * @param target －－ 目标
-     * @param method －－ 对应方法
+     * @param params －－ params
+     * @param target －－ target bean name
+     * @param method －－ target method name
      */
     public void addWorkWithSpring(Object[] params, String target, String method);
 
     /**
-     * 添加异步工作依赖Spring Bean
+     *  add asyn work with Spring Bean
      * 
-     * @param params －－ 参数
-     * @param target －－ 目标
-     * @param method －－ 对应方法
-     * @param asynCallBack －－回调
+     * @param params －－ params
+     * @param target －－  target bean name
+     * @param method －－ target method name
+     * @param asynCallBack -- callback object
      */
     public void addWorkWithSpring(Object[] params, String target, String method, AsynCallBack asynCallBack);
 
     /**
-     * 添加异步工作依赖Spring Bean
+     *  add asyn work with Spring Bean
      * 
-     * @param params －－ 参数
-     * @param target －－ 目标
-     * @param method －－ 对应方法
-     * @param asynCallBack －－回调
-     * @param weight －－ 异步工作权重
+     * @param params －－ params
+     * @param target －－ target bean name
+     * @param method －－ target method name
+     * @param asynCallBack －－target method name
+     * @param weight －－work weight
      */
     public void addWorkWithSpring(Object[] params, String target, String method, AsynCallBack asynCallBack, WorkWeight weight);
 
     /**
-     * 添加异步工作
+     * add asyn work
      * 
-     * @param asynWork －－ 异步工作实体
+     * @param asynWork －－ asyn work entity
      */
     public void addAsynWork(AsynWork asynWork);
 
     /**
-     * 获取运行状态MAP
+     * get run stat map
      * 
      * @return
      */
     public Map<String, Integer> getRunStatMap();
 
     /**
-     * 获取运行状态字符信息
+     * get run stat string
      * 
      * @return
      */
     public String getRunStatInfo();
 
     /**
-     * 设置缓存工作队列处理器
+     * add work cache work queue
      * 
      * @param workQueueFullHandler
      */
     public void setWorkQueueFullHandler(WorkQueueFullHandler workQueueFullHandler);
 
     /**
-     * 启动服务
+     * start service
      */
     public void init();
 
     /**
-     * 关闭服务
+     * close service
      */
     public void close();
 
     /**
-     * 添加服务结束处理器
+     * set close service handler
      * 
      * @param closeHander
      */
     public void setCloseHander(AsynServiceCloseHandler closeHander);
 
     /**
-     * 异常执行工作处理器
+     * set error asyn work handler
      * 
      * @param errorAsynWorkHandler
      */
