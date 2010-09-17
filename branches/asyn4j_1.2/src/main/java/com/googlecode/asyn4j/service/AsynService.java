@@ -15,6 +15,13 @@ import com.googlecode.asyn4j.core.work.AsynWork;
  * @author pan_java
  */
 public interface AsynService {
+    
+    /**
+     * add asyn work
+     * @param clzss
+     * @param method
+     */
+    public void addWork(Class clzss, String method);
 
     /**
      * add asyn work
@@ -33,7 +40,15 @@ public interface AsynService {
      * @param method －－target method name
      * @param anycResult -- callback method
      */
-    public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack);
+    public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack,boolean cache);
+    
+    /**
+     * 
+     * @param params
+     * @param tagerObject
+     * @param method
+     */
+    public void addWork(Object tagerObject, String method);
 
     /**
      * add asyn work
@@ -41,6 +56,7 @@ public interface AsynService {
      * @param params －－ params
      * @param clzss －－ traget ClASS
      * @param method －－target method name
+     * @param cache -- target object cache falg
      */
     public void addWork(Object[] params, Object tagerObject, String method);
 
@@ -61,8 +77,9 @@ public interface AsynService {
      * @param clzss －－ traget ClASS
      * @param method －－  target method name
      * @param asynCallBack －－ callback method
+     * @param cache ---target object cache falg
      */
-    public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack, WorkWeight weight);
+    public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack, WorkWeight weight,boolean cache);
 
     /**
      * add asyn work

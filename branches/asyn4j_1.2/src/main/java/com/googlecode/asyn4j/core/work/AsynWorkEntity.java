@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.googlecode.asyn4j.core.WorkWeight;
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.util.MethodUtil;
 
@@ -20,24 +21,32 @@ public class AsynWorkEntity implements AsynWork {
 
     private AsynCallBack                     anycResult;
 
-    private int                              weight         = 5;
+    private WorkWeight                       workWeight     = WorkWeight.MIDDLE;
 
     // method Cache Map
     private final static Map<String, Method> methodCacheMap = new ConcurrentHashMap<String, Method>();
+    
+    
+    public AsynWorkEntity(Object target, String method) {
+        this(target,method,null);
+    }
+    
+    
+    public AsynWorkEntity(Object target, String method,Object[]  params) {
+        this(target,method,params,null,null);
+    }
 
-    public AsynWorkEntity(Object target, String method, Object[] params, AsynCallBack anycResult) {
+    public AsynWorkEntity(Object target, String method, Object[] params, AsynCallBack anycResult, WorkWeight workWeight) {
+        if(target==null||method==null){
+            throw new IllegalArgumentException("target or method  is null");
+        }
         this.target = target;
         this.method = method;
         this.params = params;
         this.anycResult = anycResult;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
+        if(workWeight!=null){
+            this.workWeight = workWeight;
+        }
     }
 
     @Override
@@ -83,5 +92,13 @@ public class AsynWorkEntity implements AsynWork {
         sb.append(className).append("-").append(this.method);
         return sb.toString();
     }
+
+
+    @Override
+    public int getWeight() {
+        return workWeight.getValue();
+    }
+    
+    
 
 }

@@ -1,6 +1,7 @@
 package com.googlecode.asyn4j.core;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Semaphore;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,17 +14,19 @@ import com.googlecode.asyn4j.core.work.AsynWork;
  * @author pan_java
  */
 
-public class WorkProcessor implements Runnable ,Comparable<WorkProcessor>{
+public final class WorkProcessor implements Runnable ,Comparable<WorkProcessor>{
     private static final Log     log = LogFactory.getLog(WorkProcessor.class);
     private AsynWork             asynWork;
     private ErrorAsynWorkHandler errorAsynWorkHandler;
     private ExecutorService      callBackExecutor;
+    private Semaphore semaphore;
 
     public WorkProcessor(AsynWork asynWork, ErrorAsynWorkHandler errorAsynWorkHandler,
-                         final ExecutorService callBackExecutor) {
+                         final ExecutorService callBackExecutor,Semaphore semaphore) {
         this.asynWork = asynWork;
         this.errorAsynWorkHandler = errorAsynWorkHandler;
         this.callBackExecutor = callBackExecutor;
+        this.semaphore = semaphore;
     }
 
     @Override
@@ -40,6 +43,12 @@ public class WorkProcessor implements Runnable ,Comparable<WorkProcessor>{
             //if execute asyn work is error,errorAsynWorkHandler disposal
             if (errorAsynWorkHandler != null) {
                 errorAsynWorkHandler.addErrorWork(asynWork,throwable);
+            }
+        }finally{
+            try {
+                semaphore.acquire();
+            } catch (InterruptedException e) {
+                log.error(e);
             }
         }
         if (result != null) {//execute callback

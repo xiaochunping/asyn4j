@@ -33,9 +33,8 @@ public class ServiceExcute {
     }
 
     @Test
-    @Ignore
     public void testExecut2() throws InterruptedException {
-        AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100);
+        AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
         anycService.setCloseHander(new DefauleCloseHandler());
         anycService.init();
@@ -70,7 +69,7 @@ public class ServiceExcute {
     @Test
     @Ignore
     public void testCloseHandler() throws InterruptedException {
-        AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100);
+        AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
         anycService.setCloseHander(new DefauleCloseHandler());
         anycService.init();
@@ -89,8 +88,9 @@ public class ServiceExcute {
     }
 
     @Test
+    @Ignore
     public void testErrorHandler() throws InterruptedException {
-        AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100);
+        AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
         anycService.setCloseHander(new DefauleCloseHandler());
         anycService.setErrorAsynWorkHandler(new DefaultErrorAsynWorkHandler());

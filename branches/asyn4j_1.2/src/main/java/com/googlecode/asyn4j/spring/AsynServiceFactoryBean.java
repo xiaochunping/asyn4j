@@ -14,27 +14,30 @@ import com.googlecode.asyn4j.service.AsynServiceImpl;
 
 public class AsynServiceFactoryBean implements FactoryBean {
 
-    private final static Log log               = LogFactory.getLog(AsynServiceFactoryBean.class);
+    private final static Log        log                  = LogFactory.getLog(AsynServiceFactoryBean.class);
 
-    private final static int CPU_NUMBER        = Runtime.getRuntime().availableProcessors();
+    private final static int        CPU_NUMBER           = Runtime.getRuntime().availableProcessors();
 
     // default work queue cache size
-    private int              maxCacheWork      = 300;
+    private int                     maxCacheWork         = 300;
 
     // default add work wait time
-    private long             addWorkWaitTime   = Long.MAX_VALUE;
+    private long                    addWorkWaitTime      = Long.MAX_VALUE;
 
     // work thread pool size
-    private int              workThreadNum     = (CPU_NUMBER / 2) + 1;
+    private int                     workThreadNum        = (CPU_NUMBER / 2) + 1;
 
     // callback thread pool size
-    private int              callbackThreadNum = CPU_NUMBER / 2;
+    private int                     callbackThreadNum    = CPU_NUMBER / 2;
+    
+    //close service wait time
+    private long                    closeServiceWaitTime = 60 * 1000;
 
-    private WorkQueueFullHandler           workQueueFullHandler;
+    private WorkQueueFullHandler    workQueueFullHandler;
 
-    private ErrorAsynWorkHandler           errorAsynWorkHandler;
+    private ErrorAsynWorkHandler    errorAsynWorkHandler;
 
-    private AsynServiceCloseHandler           asynServiceCloseHandler;
+    private AsynServiceCloseHandler asynServiceCloseHandler;
 
     public void setMaxCacheWork(int maxCacheWork) {
         this.maxCacheWork = maxCacheWork;
@@ -51,8 +54,12 @@ public class AsynServiceFactoryBean implements FactoryBean {
     public void setCallbackThreadNum(int callbackThreadNum) {
         this.callbackThreadNum = callbackThreadNum;
     }
-    
-   public WorkQueueFullHandler getWorkQueueFullHandler() {
+
+    public void setCloseServiceWaitTime(long closeServiceWaitTime) {
+        this.closeServiceWaitTime = closeServiceWaitTime;
+    }
+
+    public WorkQueueFullHandler getWorkQueueFullHandler() {
         return workQueueFullHandler;
     }
 
@@ -79,7 +86,7 @@ public class AsynServiceFactoryBean implements FactoryBean {
     @Override
     public Object getObject() throws Exception {
         AsynService asynService = AsynServiceImpl.getService(maxCacheWork, addWorkWaitTime, workThreadNum,
-                callbackThreadNum);
+                callbackThreadNum,closeServiceWaitTime);
         //set some handler
         if (workQueueFullHandler != null) {
             asynService.setWorkQueueFullHandler(workQueueFullHandler);
@@ -92,7 +99,7 @@ public class AsynServiceFactoryBean implements FactoryBean {
         }
         asynService.init();
         return asynService;
-   }
+    }
 
     @Override
     public Class getObjectType() {
