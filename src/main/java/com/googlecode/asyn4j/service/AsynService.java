@@ -117,7 +117,7 @@ public interface AsynService {
      * 
      * @return
      */
-    public Map<String, Integer> getRunStatMap();
+    public Map<String, Long> getRunStatMap();
 
     /**
      * get run stat string
@@ -141,6 +141,9 @@ public interface AsynService {
     /**
      * close service
      */
+    public void close(long waitTime);
+    
+    
     public void close();
 
     /**

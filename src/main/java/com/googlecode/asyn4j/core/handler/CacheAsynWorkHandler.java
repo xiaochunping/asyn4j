@@ -40,14 +40,14 @@ public final class CacheAsynWorkHandler extends WorkQueueFullHandler {
 		Runnable runnable = new Runnable() {
 			public void run() {
 				while (true) {
-					Map<String, Integer> runstatMap = asynService
+					Map<String, Long> runstatMap = asynService
 							.getRunStatMap();
 					if (cacheLink.isEmpty()||runstatMap.get("total") - runstatMap.get("execute") > 300) {
 						try {
 							log.debug("work queue is full,wait 6s");
 							Thread.sleep(6000);
 						} catch (InterruptedException e) {
-
+                            Thread.currentThread().interrupt();
 						}
 						continue;
 					}

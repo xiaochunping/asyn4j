@@ -1,7 +1,5 @@
 package com.googlecode.asyn4j.core.work;
 
-import java.util.concurrent.Callable;
-
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
 
 /**
@@ -9,7 +7,7 @@ import com.googlecode.asyn4j.core.callback.AsynCallBack;
  * @author pan_java
  *
  */
-public interface AsynWork extends Callable<AsynCallBack> {
+public interface AsynWork {
 	
 	/**
 	 * get asyn work weight
@@ -34,5 +32,11 @@ public interface AsynWork extends Callable<AsynCallBack> {
 	 * @return
 	 */
     public String getThreadName();
+    
+    /**
+     * call target method
+     * @return
+     */
+    public AsynCallBack call() throws Exception;
 
 }

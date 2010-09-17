@@ -14,6 +14,6 @@ public abstract class ErrorAsynWorkHandler implements AsynHandler {
         //no to do
     }
     
-    public abstract void addErrorWork(AsynWork asynWork);
+    public abstract void addErrorWork(AsynWork asynWork,Throwable throwable);
 
 }

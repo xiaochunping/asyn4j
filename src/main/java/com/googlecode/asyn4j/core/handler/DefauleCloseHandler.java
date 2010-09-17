@@ -16,8 +16,8 @@ public class DefauleCloseHandler extends AsynServiceCloseHandler {
 
     @Override
     public void process() {
-        log.info("asyn work have " + asynWorkQueue.size() + " no run!");
-        log.info("call back have " + callBackQueue.size() + " no run!");
+        log.warn("asyn work have " + asynWorkQueue.size() + " no run!");
+        log.warn("call back have " + callBackQueue.size() + " no run!");
     }
 
 }

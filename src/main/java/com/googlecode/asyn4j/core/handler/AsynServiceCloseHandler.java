@@ -13,15 +13,15 @@ import com.googlecode.asyn4j.core.work.AsynWork;
  */
 public abstract class AsynServiceCloseHandler implements AsynHandler{
 
-    protected BlockingQueue<AsynWork>     asynWorkQueue;
+    protected BlockingQueue<Runnable>     asynWorkQueue;
 
-    protected BlockingQueue<AsynCallBack> callBackQueue;
+    protected BlockingQueue<Runnable> callBackQueue;
 
-    public void setAsynWorkQueue(BlockingQueue<AsynWork> asynWorkQueue) {
+    public void setAsynWorkQueue(BlockingQueue<Runnable> asynWorkQueue) {
         this.asynWorkQueue = asynWorkQueue;
     }
 
-    public void setCallBackQueue(BlockingQueue<AsynCallBack> callBackQueue) {
+    public void setCallBackQueue(BlockingQueue<Runnable> callBackQueue) {
         this.callBackQueue = callBackQueue;
     }
 

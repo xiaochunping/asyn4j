@@ -33,9 +33,11 @@ public class ServiceExcute {
     }
 
     @Test
+    @Ignore
     public void testExecut2() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
+        anycService.setCloseHander(new DefauleCloseHandler());
         anycService.init();
         for (long i = 0; i < 100000000; i++) {
             anycService.addWork(new Object[] { "panxiuyan" + i }, TestBean.class, "myName",new MyResult());
@@ -78,20 +80,23 @@ public class ServiceExcute {
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());
             }
+            
+            if(i==5000){
+                System.exit(1);
+            }
         }
 
     }
 
     @Test
-    @Ignore
     public void testErrorHandler() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
         anycService.setCloseHander(new DefauleCloseHandler());
         anycService.setErrorAsynWorkHandler(new DefaultErrorAsynWorkHandler());
         anycService.init();
-        for (long i = 0; i < 100000; i++) {
-            anycService.addWork(new Object[] { "panxiuyan" + i }, TestBean.class, "myName");
+        for (long i = 0; i < 100000000; i++) {
+            anycService.addWork(new Object[] { "panxiuyan" + i }, TestBean.class, "myName",new MyResult());
 
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());
