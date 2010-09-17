@@ -1,7 +1,6 @@
 package com.googlecode.asyn4j.core;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,44 +13,37 @@ import com.googlecode.asyn4j.core.work.AsynWork;
  * @author pan_java
  */
 
-public class WorkProcessor implements Runnable {
-    private static final Log            log = LogFactory.getLog(WorkProcessor.class);
-    private AsynWork                    asynWork;
-    private String                      name;
-    private BlockingQueue<AsynCallBack> resultQueue;
-    private ErrorAsynWorkHandler        errorAsynWorkHandler;
+public class WorkProcessor implements Runnable ,Comparable<WorkProcessor>{
+    private static final Log     log = LogFactory.getLog(WorkProcessor.class);
+    private AsynWork             asynWork;
+    private ErrorAsynWorkHandler errorAsynWorkHandler;
+    private ExecutorService      callBackExecutor;
 
-    public WorkProcessor(AsynWork asynWork, String name, final BlockingQueue<AsynCallBack> resultQueue,
-                         ErrorAsynWorkHandler errorAsynWorkHandler) {
+    public WorkProcessor(AsynWork asynWork, ErrorAsynWorkHandler errorAsynWorkHandler,
+                         final ExecutorService callBackExecutor) {
         this.asynWork = asynWork;
-        this.name = name;
-        this.resultQueue = resultQueue;
         this.errorAsynWorkHandler = errorAsynWorkHandler;
+        this.callBackExecutor = callBackExecutor;
     }
 
     @Override
     public void run() {
         Thread currentThread = Thread.currentThread();
-        if (name != null) {
-            setName(currentThread, name);
+        if (asynWork.getThreadName() != null) {
+            setName(currentThread, asynWork.getThreadName());
         }
         AsynCallBack result = null;
         try {
+            //asyn work execute
             result = asynWork.call();
-        } catch (Exception e) {
-            if(errorAsynWorkHandler!=null){
-                errorAsynWorkHandler.addErrorWork(asynWork);
+        } catch (Throwable throwable ) {
+            //if execute asyn work is error,errorAsynWorkHandler disposal
+            if (errorAsynWorkHandler != null) {
+                errorAsynWorkHandler.addErrorWork(asynWork,throwable);
             }
-            log.error(e);
         }
-        //execute work total increment
-        AsynWorkExecute.incrementExecuteWork();
-        if (result != null) {
-            try {
-                resultQueue.offer(result, 2000, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                log.error(e);
-            }
+        if (result != null) {//execute callback
+            callBackExecutor.execute(result);
         }
 
     }
@@ -68,6 +60,15 @@ public class WorkProcessor implements Runnable {
         } catch (SecurityException se) {
             log.error(se);
         }
+    }
+
+    public AsynWork getAsynWork() {
+        return asynWork;
+    }
+    
+    @Override
+    public int compareTo(WorkProcessor o) {
+        return o.getAsynWork().getWeight() - this.asynWork.getWeight();
     }
 
 }

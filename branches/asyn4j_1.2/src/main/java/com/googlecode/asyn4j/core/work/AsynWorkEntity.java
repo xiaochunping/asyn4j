@@ -8,95 +8,80 @@ import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.util.MethodUtil;
 
 /**
- * 
  * @author pan_java
- *
  */
-public class AsynWorkEntity implements AsynWork, Comparable<AsynWorkEntity> {
+public class AsynWorkEntity implements AsynWork {
 
-	private Object target;
+    private Object                           target;
 
-	private String method;
+    private String                           method;
 
-	private Object[] params;
+    private Object[]                         params;
 
-	private AsynCallBack anycResult;
+    private AsynCallBack                     anycResult;
 
-	private int weight = 10;
+    private int                              weight         = 5;
 
-	// method Cache Map
-	private final static Map<String, Method> methodCacheMap = new ConcurrentHashMap<String, Method>();
+    // method Cache Map
+    private final static Map<String, Method> methodCacheMap = new ConcurrentHashMap<String, Method>();
 
-	public AsynWorkEntity(Object target, String method, Object[] params,
-			AsynCallBack anycResult) {
-		this.target = target;
-		this.method = method;
-		this.params = params;
-		this.anycResult = anycResult;
-	}
+    public AsynWorkEntity(Object target, String method, Object[] params, AsynCallBack anycResult) {
+        this.target = target;
+        this.method = method;
+        this.params = params;
+        this.anycResult = anycResult;
+    }
 
-	public int getWeight() {
-		return weight;
-	}
+    public int getWeight() {
+        return weight;
+    }
 
-	public void setWeight(int weight) {
-		this.weight = weight;
-	}
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
 
-	@Override
-	public AsynCallBack call() throws Exception {
+    @Override
+    public AsynCallBack call() throws Exception {
 
-		if (target == null)
-			throw new RuntimeException("target object is null");
+        if (target == null)
+            throw new RuntimeException("target object is null");
 
-		Class clazz = target.getClass();
+        Class clazz = target.getClass();
 
-		String methodKey = MethodUtil.getClassMethodKey(clazz, params, method);
+        String methodKey = MethodUtil.getClassMethodKey(clazz, params, method);
 
-		Method targetMethod = methodCacheMap.get(methodKey);
+        Method targetMethod = methodCacheMap.get(methodKey);
 
-		if (targetMethod == null) {
-			targetMethod = MethodUtil.getTargetMethod(clazz, params, method);
-			if (targetMethod != null) {
-				methodCacheMap.put(methodKey, targetMethod);
-			}
-		}
-		
-		if(targetMethod==null){
-			throw new IllegalArgumentException("target method is null");
-		}
+        if (targetMethod == null) {
+            targetMethod = MethodUtil.getTargetMethod(clazz, params, method);
+            if (targetMethod != null) {
+                methodCacheMap.put(methodKey, targetMethod);
+            }
+        }
 
-		Object result = targetMethod.invoke(target, params);
-		if(anycResult!=null){//if call back is not null
-			anycResult.setInokeResult(result);
-		}
-		return anycResult;
+        if (targetMethod == null) {
+            throw new IllegalArgumentException("target method is null");
+        }
 
-	}
-	
-	@Override
-	public AsynCallBack getAnycResult() {
-		return anycResult;
-	}
+        Object result = targetMethod.invoke(target, params);
+        if (anycResult != null) {//if call back is not null
+            anycResult.setInokeResult(result);
+        }
+        return anycResult;
 
-	@Override
-	public int compareTo(AsynWorkEntity o) {
-		return o.getWeight() - this.weight;
-	}
+    }
 
-	@Override
-	public String getThreadName() {
-		String className =this.target.getClass().getSimpleName();
-		StringBuilder sb = new StringBuilder();
-		sb.append(className).append("/").append(this.method).append("/");
-		if(this.params!=null){
-			sb.append(params.length);
-		}else{
-			sb.append(0);
-		}
-		return sb.toString();
-	}
-	
-	
+    @Override
+    public AsynCallBack getAnycResult() {
+        return anycResult;
+    }
+
+    @Override
+    public String getThreadName() {
+        String className = this.target.getClass().getSimpleName();
+        StringBuilder sb = new StringBuilder();
+        sb.append(className).append("-").append(this.method);
+        return sb.toString();
+    }
 
 }
