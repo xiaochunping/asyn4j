@@ -45,11 +45,7 @@ public final class WorkProcessor implements Runnable ,Comparable<WorkProcessor>{
                 errorAsynWorkHandler.addErrorWork(asynWork,throwable);
             }
         }finally{
-            try {
-                semaphore.acquire();
-            } catch (InterruptedException e) {
-                log.error(e);
-            }
+                semaphore.release();
         }
         if (result != null) {//execute callback
             callBackExecutor.execute(result);

@@ -28,11 +28,12 @@ public final class CacheAsynWorkHandler extends WorkQueueFullHandler {
 	}
 
 	@Override
-	public void addAsynWork(AsynWork asynWork) {
+	public boolean addAsynWork(AsynWork asynWork) {
 		boolean result = cacheLink.offer(asynWork);
 		if(!result){
 			log.warn("asyn work cache queue is full");
 		}
+		return result;
 	}
 
 	@Override
