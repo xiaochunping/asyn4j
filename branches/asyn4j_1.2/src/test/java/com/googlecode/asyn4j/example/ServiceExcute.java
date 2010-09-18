@@ -38,12 +38,15 @@ public class ServiceExcute {
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
         anycService.setCloseHander(new DefauleCloseHandler());
         anycService.init();
-        for (long i = 0; i < 100000000; i++) {
-            anycService.addWork(new Object[] { "panxiuyan" + i }, TestBean.class, "myName",new MyResult());
+        TestBean aa = new TestBean();
+        for (long i = 0; i < 700; i++) {
+            anycService.addWork(aa, "myName",new Object[] { "panxiuyan" + i },new MyResult());
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());
             }
         }
+        
+        Thread.sleep(Long.MAX_VALUE);
 
     }
 
@@ -53,7 +56,7 @@ public class ServiceExcute {
         AsynService anycService = AsynServiceImpl.getService();
         anycService.init();
         ArrayList list = new ArrayList();
-        anycService.addWork(new Object[] { list }, TestBean.class, "myName", new MyResult());
+        anycService.addWork( TestBean.class, "myName", new Object[] { list },new MyResult());
         Thread.sleep(Long.MAX_VALUE);
 
     }
@@ -74,7 +77,7 @@ public class ServiceExcute {
         anycService.setCloseHander(new DefauleCloseHandler());
         anycService.init();
         for (long i = 0; i < 100000; i++) {
-            anycService.addWork(new Object[] { "panxiuyan" + i }, TestBean.class, "myName");
+            anycService.addWork( TestBean.class, "myName",new Object[] { "panxiuyan" + i });
 
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());
@@ -96,7 +99,7 @@ public class ServiceExcute {
         anycService.setErrorAsynWorkHandler(new DefaultErrorAsynWorkHandler());
         anycService.init();
         for (long i = 0; i < 100000000; i++) {
-            anycService.addWork(new Object[] { "panxiuyan" + i }, TestBean.class, "myName",new MyResult());
+            anycService.addWork( TestBean.class, "myName",new Object[] { "panxiuyan" + i },new MyResult());
 
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());

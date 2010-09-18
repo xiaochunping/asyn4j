@@ -16,39 +16,14 @@ import com.googlecode.asyn4j.core.work.AsynWork;
  */
 public interface AsynService {
     
-    /**
-     * add asyn work
-     * @param clzss
-     * @param method
-     */
-    public void addWork(Class clzss, String method);
-
-    /**
-     * add asyn work
-     * 
-     * @param params －－ params
-     * @param clzss －－ traget ClASS
-     * @param method －－ target method name
-     */
-    public void addWork(Object[] params, Class clzss, String method);
-
-    /**
-     *  add asyn work
-     * 
-     * @param params －－ params
-     * @param clzss －－ traget ClASS
-     * @param method －－target method name
-     * @param anycResult -- callback method
-     */
-    public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack,boolean cache);
-    
+     
     /**
      * 
      * @param params
      * @param tagerObject
      * @param method
      */
-    public void addWork(Object tagerObject, String method);
+    public boolean addWork(Object tagerObject, String method);
 
     /**
      * add asyn work
@@ -58,7 +33,7 @@ public interface AsynService {
      * @param method －－target method name
      * @param cache -- target object cache falg
      */
-    public void addWork(Object[] params, Object tagerObject, String method);
+    public boolean addWork(Object tagerObject, String method,Object[] params);
 
     /**
      * add asyn work
@@ -68,19 +43,9 @@ public interface AsynService {
      * @param method －－ target method name
      * @param asynCallBack --callback method
      */
-    public void addWork(Object[] params, Object tagerObject, String method, AsynCallBack asynCallBack);
+    public boolean addWork(Object tagerObject, String method,Object[] params, AsynCallBack asynCallBack);
 
-    /**
-     * add asyn work
-     * 
-     * @param params －－ params
-     * @param clzss －－ traget ClASS
-     * @param method －－  target method name
-     * @param asynCallBack －－ callback method
-     * @param cache ---target object cache falg
-     */
-    public void addWork(Object[] params, Class clzss, String method, AsynCallBack asynCallBack, WorkWeight weight,boolean cache);
-
+    
     /**
      * add asyn work
      * 
@@ -90,26 +55,13 @@ public interface AsynService {
      * @param asynCallBack －－ callback method
      * @param weight －－ work weight
      */
-    public void addWork(Object[] params, Object tagerObject, String method, AsynCallBack asynCallBack, WorkWeight weight);
+    public boolean addWork(Object tagerObject, String method, Object[] params,AsynCallBack asynCallBack, WorkWeight weight);
+    
+    
+    
+    public boolean addWork(Object Object, String method, Object[] params, AsynCallBack asynCallBack, WorkWeight weight,
+            boolean cache);
 
-    /**
-     * add asyn work with Spring Bean
-     * 
-     * @param params －－ params
-     * @param target －－ target bean name
-     * @param method －－ target method name
-     */
-    public void addWorkWithSpring(Object[] params, String target, String method);
-
-    /**
-     *  add asyn work with Spring Bean
-     * 
-     * @param params －－ params
-     * @param target －－  target bean name
-     * @param method －－ target method name
-     * @param asynCallBack -- callback object
-     */
-    public void addWorkWithSpring(Object[] params, String target, String method, AsynCallBack asynCallBack);
 
     /**
      *  add asyn work with Spring Bean
@@ -120,14 +72,14 @@ public interface AsynService {
      * @param asynCallBack －－target method name
      * @param weight －－work weight
      */
-    public void addWorkWithSpring(Object[] params, String target, String method, AsynCallBack asynCallBack, WorkWeight weight);
+    public boolean addWorkWithSpring( String target, String method,Object[] params, AsynCallBack asynCallBack, WorkWeight weight);
 
     /**
      * add asyn work
      * 
      * @param asynWork －－ asyn work entity
      */
-    public void addAsynWork(AsynWork asynWork);
+    public boolean addAsynWork(AsynWork asynWork);
 
     /**
      * get run stat map
@@ -157,10 +109,13 @@ public interface AsynService {
 
     /**
      * close service
+     * @ wait time
      */
     public void close(long waitTime);
     
-    
+    /**
+     * close service
+     */
     public void close();
 
     /**
