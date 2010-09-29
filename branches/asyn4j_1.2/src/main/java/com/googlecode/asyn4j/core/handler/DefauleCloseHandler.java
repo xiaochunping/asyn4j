@@ -14,6 +14,10 @@ public class DefauleCloseHandler extends AsynServiceCloseHandler {
 
     private final static Log log = LogFactory.getLog(DefauleCloseHandler.class);
 
+    /**
+     * asynWorkQueue item is WorkProcessor entity
+     * callBackQueue item is AsynCallBack entity
+     */
     @Override
     public void process() {
         log.warn("asyn work have " + asynWorkQueue.size() + " no run!");

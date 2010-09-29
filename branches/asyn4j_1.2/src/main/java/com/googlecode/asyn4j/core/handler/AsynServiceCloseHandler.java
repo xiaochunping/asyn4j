@@ -2,6 +2,7 @@ package com.googlecode.asyn4j.core.handler;
 
 import java.util.concurrent.BlockingQueue;
 
+import com.googlecode.asyn4j.core.WorkProcessor;
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.core.work.AsynWork;
 
