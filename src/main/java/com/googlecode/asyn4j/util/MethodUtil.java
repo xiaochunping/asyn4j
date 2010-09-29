@@ -28,7 +28,7 @@ public final class MethodUtil {
 		Method[] methods = clazz.getMethods();
 
 		for (Method method : methods) {
-			if (method.getName().equals(methodName)) {//add methodName some item
+		    if (method.getName().equals(methodName)) {//add methodName some item
 				mList.add(method);
 			}
 		}
