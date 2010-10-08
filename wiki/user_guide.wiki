@@ -1,8 +1,10 @@
-* 1.1更新
-  # 异步工作分为三个权重
-  # 增加关闭服务处理器 
-  # 增加异步工作执行异常处理器
-  # Spring 支持完善
+* 1.2更新
+  # 设置关闭服务延时
+  # 设置异步工作超时设置
+  # 使用信号量设置最大工作队列
+  # 优化用户接口
+
+
 
  
 ==例子:==
@@ -11,7 +13,7 @@
 {{{
 	public static void main(String[] args) {
 		// 初始化异步工作服务
-		AsynService asynService =  AsynServiceImpl.getService(300, 3000L, 3, 2);
+		AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
                 //异步工作缓冲处理器
                 anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
                 //服务关闭处理器
@@ -24,12 +26,11 @@
 		AsynCallBack back = new TargetBack();
 		for (int i = 0; i < 1000; i++) {
 			// 添加加异步工作- TargetService 的 test 方法 ，方法参数 asynej+ i
-			asynService.addWork(new Object[] { "asyn4j" + i },
-					TargetService.class, "test", new TargetBack());
+			asynService.addWork(TargetService.class, "test", new Object[] { "asyn4j" + i },new TargetBack());
                         //实例化目标对象再调用
                        // TargetService targetService = new TargetService ();
-                       //asynService.addWork(new Object[] { "asyn4j" + i },
-		//		targetService , "test", new TargetBack());
+                       //asynService.addWork(
+		//		targetService , "test",new Object[] { "asyn4j" + i }, new TargetBack());
                        
 		}
         }
@@ -76,6 +77,7 @@ public class TargetService {
 		<property name="addWorkWaitTime" value="2000"></property>
 		<property name="workThreadNum" value="3"></property>
 		<property name="callbackThreadNum" value="2"></property>
+                 <property name="closeServiceWaitTime" value="2000"></property>
 		<!--添加相关处理器-->
 		<property name="errorAsynWorkHandler">
 			<bean class="com.googlecode.asyn4j.core.handler.DefaultErrorAsynWorkHandler"/>
@@ -96,7 +98,7 @@ public class TargetService {
 	
 	public void maintest(){
 		for(int i=0;i<10000;i++){
-			asynService.addWorkWithSpring(new Object[] { "panxiuyan" + i }, "testBean", "myName");
+			asynService.addWorkWithSpring("testBean", "myName",new Object[] { "panxiuyan" + i });
 		}
 	}
 
@@ -160,11 +162,12 @@ public void addWorkWithSpring(Object[] params,String target,String method,AsynCa
   # (addWorkWaitTime)当工作队列满时添加工作等待时间-- Long.MAX_VALUE;
   # (workThreadNum)异步工作执行线程池大小  ---- CPU核数/2 +1
   # (callBackThreadNum)回调执行线程池大小  --- CPU核数/2
+  # (closeServiceWaitTime) 服务关闭等待时间  ---- 60000s
 
 
 ===二.自定义参数构造函数,参数顺序对应前面的说明===
 {{{
- AsynServiceImpl.getService (1000, 1000L, 3, 2);
+ AsynServiceImpl.getService (1000, 1000L, 3, 2,60 * 1000);
 }}}
 
 AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序再引用.
@@ -184,67 +187,77 @@ AsynServiceImpl 是线程安全的，可以初始化一个实例，所有程序�
 
 ===五．添加异步工作API===
 {{{
-/**
-	 * 添加异步工作
-	 * @param params  －－ 目标方法参数
-	 * @param clzss  －－ 目标类ClASS
-	 * @param method  －－ 对应方法 
-	 * @param asynCallBack --回调
-	 */
-	public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack);
-	
-	/**
-	 * 添加异步工作
-	 * @param params  －－目标方法参数
-	 * @param clzss  －－ 目标类对象
-	 * @param method  －－ 对应方法 
-	 * @param asynCallBack --回调
-	 */
-	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack);
-	
-	/**
-	 * 添加异步工作
-	 * @param params  －－目标方法参数
-	 * @param clzss  －－ 目标类ClASS
-	 * @param method  －－ 对应方法 
-	 * @param asynCallBack --回调
-	 */
-	public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack,WorkWeight weight);
-	
-	/**
-	 * 添加异步工作
-	 * @param params  －－目标方法参数
-	 * @param clzss  －－ 目标类对象
-	 * @param method  －－ 对应方法 
-	 * @param asynCallBack --回调
-      *@param weight --   工作权重 默认 5
-	 */
-	public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, WorkWeight weight);
-	
-/**
-	 * 添加异步工作依赖Spring Bean
-	 * @param params  －－目标方法参数
-	 * @param target  －－ Bean名称
-	 * @param method  －－ 对应方法 
-	 * @param asynCallBack --回调
-	 */
-	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack);
-	
-/**
-	 * 添加异步工作依赖Spring Bean
-	 * @param params  －－目标方法参数
-	 * @param target  －－ Bean名称
-	 * @param method  －－ 对应方法 
-	  *@param weight --   工作权重 默认 5
-	 * 
-	 */
-	public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack,WorkWeight weight);
-	
-/**
-	 *  添加异步工作
-	 * @param asynWork   -- 异步工作实体
-	 */
-	public void addAsynWork(AsynWork asynWork);
+ /**
+     * 添加异步工作
+     * @param tagerObject -- 目标对象（可以是 Class,Object,String(spring)）
+     * @param method  -- 目标方法
+     */
+    public void addWork(Object tagerObject, String method);
+
+    /**
+     * 添加异步工作
+     * @param tagerObject －－ 目标对象（可以是 Class,Object,String(spring)）
+     * @param method －－ 目标方法
+     * @param params -- 目标方法参数
+     */
+    public void addWork(Object tagerObject, String method,Object[] params);
+
+    /**
+     * 添加异步工作
+     * 
+     * 
+     * @param tagerObject －－ 目标对象（可以是 Class,Object,String(spring)）
+     * @param method －－ 目标方法
+     * @param asynCallBack --回调对象
+     * @param params －－ 目标方法参数
+     */
+    public void addWork(Object tagerObject, String method,Object[] params, AsynCallBack asynCallBack);
+
+    
+    /**
+     * 添加异步工作
+     * 
+     * 
+     * @param tagerObject －－ 目标对象（可以是 Class,Object,String(spring)）
+     * @param method －－ 目标方法
+     * @param asynCallBack --回调对象
+     * @param params －－ 目标方法参数
+     * @param weight －－ 工作权重
+     
+     */
+    public void addWork(Object tagerObject, String method, Object[] params,AsynCallBack asynCallBack, WorkWeight weight);
+    
+    
+    /**
+     * 添加异步工作
+     * @param tagerObject －－ 目标对象（可以是 Class,Object,String(spring)）
+     * @param method －－ 目标方法
+     * @param asynCallBack --回调对象
+     * @param params －－ 目标方法参数
+     * @param weight －－ 工作权重
+     * @param cache －－  如果目标对象为class，实例化后是否缓存
+     */
+    public void addWork(Object tagerObject, String method, Object[] params, AsynCallBack asynCallBack, WorkWeight weight,
+            boolean cache);
+
+
+    /**
+     *  Spring 添加异步工作
+     * 
+     * @param target －－ 目标对象BeanName
+     * @param method －－ 目标方法
+     * @param asynCallBack --回调对象
+     * @param params －－ 目标方法参数
+     * @param weight －－ 工作权重
+     */
+    public void addWorkWithSpring( String target, String method,Object[] params, AsynCallBack asynCallBack, WorkWeight weight);
+
+    /**
+     * 添加异步工作 
+     * 
+     * @param asynWork －－ 异步工作实例
+     */
+    public void addAsynWork(AsynWork asynWork);
 	
 }}}
 ===六.获取运行状态信息===
