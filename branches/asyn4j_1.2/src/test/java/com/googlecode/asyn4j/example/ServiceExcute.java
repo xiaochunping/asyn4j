@@ -29,7 +29,7 @@ public class ServiceExcute {
 
     @Before
     public void setUp() {
-       // context = new FileSystemXmlApplicationContext("D:/java/asyn4j_1.1/src/main/java/applicationContext.xml");
+      //context = new FileSystemXmlApplicationContext("D:/java/asyn4j_1.2/src/main/java/applicationContext.xml");
     }
 
     @Test
@@ -39,7 +39,7 @@ public class ServiceExcute {
         anycService.setCloseHander(new DefauleCloseHandler());
         anycService.init();
         TestBean aa = new TestBean();
-        for (long i = 0; i < 700; i++) {
+        for (long i = 0; i < 700000; i++) {
             anycService.addWork(aa, "myName",new Object[] { "panxiuyan" + i },new MyResult());
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());
@@ -76,14 +76,14 @@ public class ServiceExcute {
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
         anycService.setCloseHander(new DefauleCloseHandler());
         anycService.init();
-        for (long i = 0; i < 100000; i++) {
-            anycService.addWork( TestBean.class, "myName",new Object[] { "panxiuyan" + i });
+        for (long i = 0; i < 1000; i++) {
+            anycService.addWork( TestBean.class, "myName",new Object[] { "panxiuyan" + i },new MyResult());
 
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());
             }
             
-            if(i==5000){
+            if(i==500){
                 System.exit(1);
             }
         }
