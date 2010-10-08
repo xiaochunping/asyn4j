@@ -137,20 +137,8 @@ AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100,
 
 
 ===4.异步工作优级===
-{{{
-分成三个等级WorkWeight.LOW,WorkWeight.MIDDLE, WorkWeight.HIGH
-默认优先级为WorkWeight.MIDDLE  ,相关API
-//目标对象为指定实例
-public void addWork(Object[] params, Object tagerObject, String method,AsynCallBack asynCallBack, WorkWeight weight);
-
-//目标对象为class
-public void addWork(Object[] params,Class clzss,String method,AsynCallBack asynCallBack,WorkWeight weight);
-
-//Spring对应
-public void addWorkWithSpring(Object[] params,String target,String method,AsynCallBack asynCallBack,WorkWeight weight);
-
-}}}
-
+  分成三个等级WorkWeight.LOW,WorkWeight.MIDDLE, WorkWeight.HIGH
+  默认优先级为WorkWeight.MIDDLE 。
 
 ==API说明==
 ===一.默认构造函数===
@@ -158,11 +146,11 @@ public void addWorkWithSpring(Object[] params,String target,String method,AsynCa
    AsynServiceImpl.getService();
 }}}
 * 采用的默认参数为,
-  # (maxCacheWork)最大工作队列缓存工作数 – 300
-  # (addWorkWaitTime)当工作队列满时添加工作等待时间-- Long.MAX_VALUE;
-  # (workThreadNum)异步工作执行线程池大小  ---- CPU核数/2 +1
-  # (callBackThreadNum)回调执行线程池大小  --- CPU核数/2
-  # (closeServiceWaitTime) 服务关闭等待时间  ---- 60000s
+  # (maxCacheWork)最大工作队列缓存工作数 – 300(默认值)
+  # (addWorkWaitTime)当工作队列满时添加工作等待时间-- Long.MAX_VALUE(默认值)
+  # (workThreadNum)异步工作执行线程池大小  ---- CPU核数/2 +1(默认值)
+  # (callBackThreadNum)回调执行线程池大小  --- CPU核数/2(默认值)
+  # (closeServiceWaitTime) 服务关闭等待时间  ---- 60000s(默认值)
 
 
 ===二.自定义参数构造函数,参数顺序对应前面的说明===
