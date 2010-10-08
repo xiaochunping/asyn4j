@@ -23,7 +23,7 @@ public interface AsynService {
      * @param tagerObject
      * @param method
      */
-    public boolean addWork(Object tagerObject, String method);
+    public void addWork(Object tagerObject, String method);
 
     /**
      * add asyn work
@@ -33,7 +33,7 @@ public interface AsynService {
      * @param method －－target method name
      * @param cache -- target object cache falg
      */
-    public boolean addWork(Object tagerObject, String method,Object[] params);
+    public void addWork(Object tagerObject, String method,Object[] params);
 
     /**
      * add asyn work
@@ -43,7 +43,7 @@ public interface AsynService {
      * @param method －－ target method name
      * @param asynCallBack --callback method
      */
-    public boolean addWork(Object tagerObject, String method,Object[] params, AsynCallBack asynCallBack);
+    public void addWork(Object tagerObject, String method,Object[] params, AsynCallBack asynCallBack);
 
     
     /**
@@ -55,11 +55,19 @@ public interface AsynService {
      * @param asynCallBack －－ callback method
      * @param weight －－ work weight
      */
-    public boolean addWork(Object tagerObject, String method, Object[] params,AsynCallBack asynCallBack, WorkWeight weight);
+    public void addWork(Object tagerObject, String method, Object[] params,AsynCallBack asynCallBack, WorkWeight weight);
     
     
-    
-    public boolean addWork(Object Object, String method, Object[] params, AsynCallBack asynCallBack, WorkWeight weight,
+    /**
+     * 
+     * @param tagerObject －－ traget Object 
+     * @param method－－ target method name
+     * @param params －－ params
+     * @param asynCallBack －－ callback
+     * @param weight－－ work weight
+     * @param cache －－  target is cache
+     */
+    public void addWork(Object tagerObject, String method, Object[] params, AsynCallBack asynCallBack, WorkWeight weight,
             boolean cache);
 
 
@@ -72,14 +80,14 @@ public interface AsynService {
      * @param asynCallBack －－target method name
      * @param weight －－work weight
      */
-    public boolean addWorkWithSpring( String target, String method,Object[] params, AsynCallBack asynCallBack, WorkWeight weight);
+    public void addWorkWithSpring( String target, String method,Object[] params, AsynCallBack asynCallBack, WorkWeight weight);
 
     /**
      * add asyn work
      * 
      * @param asynWork －－ asyn work entity
      */
-    public boolean addAsynWork(AsynWork asynWork);
+    public void addAsynWork(AsynWork asynWork);
 
     /**
      * get run stat map

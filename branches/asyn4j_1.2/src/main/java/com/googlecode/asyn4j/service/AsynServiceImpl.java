@@ -204,37 +204,39 @@ public class AsynServiceImpl implements AsynService {
     }
 
     @Override
-    public boolean addWork(Object tagerObject, String method) {
-        return addWork(tagerObject, method, null);
+    public void addWork(Object tagerObject, String method) {
+        addWork(tagerObject, method, null);
     }
 
     @Override
-    public boolean addWork(Object tagerObject, String method, Object[] params) {
-        return addWork(tagerObject, method, params, null);
+    public void addWork(Object tagerObject, String method, Object[] params) {
+        addWork(tagerObject, method, params, null);
 
     }
 
     @Override
-    public boolean addWork(Object tagerObject, String method, Object[] params, AsynCallBack asynCallBack) {
-        return addWork(tagerObject, method, params, asynCallBack, DEFAULT_WORK_WEIGHT);
+    public void addWork(Object tagerObject, String method, Object[] params, AsynCallBack asynCallBack) {
+        addWork(tagerObject, method, params, asynCallBack, DEFAULT_WORK_WEIGHT);
     }
 
     @Override
-    public boolean addWork(Object tagerObject, String method, Object[] params, AsynCallBack asynCallBack,
+    public void addWork(Object tagerObject, String method, Object[] params, AsynCallBack asynCallBack,
                            WorkWeight weight) {
-        return addWork(tagerObject, method, params, asynCallBack, DEFAULT_WORK_WEIGHT, false);
+        addWork(tagerObject, method, params, asynCallBack, DEFAULT_WORK_WEIGHT, false);
     }
 
     @Override
-    public boolean addWork(Object tagerObject, String method, Object[] params, AsynCallBack asynCallBack,
+    public void addWork(Object tagerObject, String method, Object[] params, AsynCallBack asynCallBack,
                            WorkWeight weight, boolean cache) {
         if (tagerObject == null || method == null) {
             throw new IllegalArgumentException("target name is null or  target method name is null");
         }
 
         Object target = null;
-        if (tagerObject instanceof String) {//tagerObject form string to spirng name
-            this.addWorkWithSpring((String) target, method, params, asynCallBack, weight);
+        if (tagerObject.getClass().isAssignableFrom(String.class)) {//tagerObject form string to spirng name
+            
+            addWorkWithSpring(tagerObject.toString(), method, params, asynCallBack, weight);
+            return ;
 
         } else if (tagerObject instanceof Class) {//tagerObject form class to targetclass
             String classKey = ((Class) tagerObject).getSimpleName();
@@ -256,7 +258,7 @@ public class AsynServiceImpl implements AsynService {
         }
         AsynWork anycWork = new AsynWorkEntity(target, method, params, asynCallBack, weight);
 
-        return addAsynWork(anycWork);
+        addAsynWork(anycWork);
 
     }
 
@@ -280,7 +282,7 @@ public class AsynServiceImpl implements AsynService {
     }
 
     @Override
-    public boolean addWorkWithSpring(String target, String method, Object[] params, AsynCallBack asynCallBack,
+    public void addWorkWithSpring(String target, String method, Object[] params, AsynCallBack asynCallBack,
                                      WorkWeight weight) {
 
         if (target == null || method == null) {
@@ -294,7 +296,7 @@ public class AsynServiceImpl implements AsynService {
 
         AsynWork anycWork = new AsynWorkEntity(bean, method, params, asynCallBack, weight);
 
-        return addAsynWork(anycWork);
+       addAsynWork(anycWork);
 
     }
 
@@ -304,7 +306,7 @@ public class AsynServiceImpl implements AsynService {
      * @param asynWork
      * @throws Asyn4jException
      */
-    public boolean addAsynWork(AsynWork asynWork) {
+    public void addAsynWork(AsynWork asynWork) {
         if (!run) {// if asyn service is stop or no start!
             throw new Asyn4jException("asyn service is stop or no start!");
         }
@@ -319,15 +321,13 @@ public class AsynServiceImpl implements AsynService {
                 // asyn work execute
                 workExecutor.execute(workProcessor);
                 totalWork.incrementAndGet();
-                return true;
             } else {
                 log.warn("work queue is full,add work to cache queue");
-                return workQueueFullHandler.addAsynWork(asynWork);
+               workQueueFullHandler.addAsynWork(asynWork);
             }
         } catch (InterruptedException e) {
             log.error(e);
         }
-        return false;
 
     }
 
