@@ -19,7 +19,7 @@ public final class CallBackRejectedExecutionHandler implements RejectedExecution
     @Override
     public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
         AsynCallBack asynCallBack = (AsynCallBack) r;
-        log.warn(r + "not execure");
+        log.warn(r + " not execute");
     }
 
 }
