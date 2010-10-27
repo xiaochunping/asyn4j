@@ -186,8 +186,6 @@ public class AsynServiceImpl implements AsynService {
     public void close(long waitTime) {
         if (run) {
             run = false;
-            workExecutor.shutdown();
-            callBackExecutor.shutdown();
             try {
                 workExecutor.awaitTermination(waitTime, TimeUnit.MILLISECONDS);
                 //workExecutor is wait sometime,so callBackExecutor wait time is 0
@@ -195,6 +193,8 @@ public class AsynServiceImpl implements AsynService {
             } catch (InterruptedException e) {
                 log.error(e);
             }
+            workExecutor.shutdown();
+            callBackExecutor.shutdown();
             if (closeHander != null) {
                 closeHander.setAsynWorkQueue(workQueue);
                 closeHander.setCallBackQueue(callBackQueue);
