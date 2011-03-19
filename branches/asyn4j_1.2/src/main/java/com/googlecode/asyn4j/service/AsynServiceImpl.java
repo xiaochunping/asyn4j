@@ -23,7 +23,7 @@ import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.core.callback.CallBackRejectedExecutionHandler;
 import com.googlecode.asyn4j.core.callback.CallBackThreadFactory;
 import com.googlecode.asyn4j.core.callback.CallBackThreadPoolExecutor;
-import com.googlecode.asyn4j.core.handler.AsynServiceCloseHandler;
+import com.googlecode.asyn4j.core.handler.AsynServiceHandler;
 import com.googlecode.asyn4j.core.handler.ErrorAsynWorkHandler;
 import com.googlecode.asyn4j.core.handler.WorkQueueFullHandler;
 import com.googlecode.asyn4j.core.work.AsynThreadFactory;
@@ -67,8 +67,9 @@ public class AsynServiceImpl implements AsynService {
 
     private WorkQueueFullHandler                          workQueueFullHandler = null;
 
-    private AsynServiceCloseHandler                       closeHander          = null;
-    private ErrorAsynWorkHandler                          errorAsynWorkHandler = null;
+	private AsynServiceHandler serviceHandler = null;
+	private ErrorAsynWorkHandler errorAsynWorkHandler = null;
+
 
     // default work queue cache size
     private static int                                    maxCacheWork         = 300;
@@ -161,10 +162,17 @@ public class AsynServiceImpl implements AsynService {
             callBackExecutor = new CallBackThreadPoolExecutor(callback_thread_num, callback_thread_num, 0L,
                     TimeUnit.MILLISECONDS, callBackQueue, new CallBackThreadFactory(),
                     new CallBackRejectedExecutionHandler(), callBackNum);
-
+			
+			if(serviceHandler!=null){
+				serviceHandler.setServiceStat(AsynService.SERVICE_INIT);
+				serviceHandler.process();
+			}
+            
             if (workQueueFullHandler != null) {
                 workQueueFullHandler.process();
             }
+			
+			
 
             // jvm close run
             Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -182,26 +190,28 @@ public class AsynServiceImpl implements AsynService {
         this.close(closeServiceWaitTime);
     }
 
-    @Override
-    public void close(long waitTime) {
-        if (run) {
-            run = false;
-            try {
-                workExecutor.awaitTermination(waitTime, TimeUnit.MILLISECONDS);
-                //workExecutor is wait sometime,so callBackExecutor wait time is 0
+	@Override
+	public void close(long waitTime) {
+		if (run) {
+			run = false;
+			try {
+				workExecutor.awaitTermination(waitTime, TimeUnit.MILLISECONDS);
+				//workExecutor is wait sometime,so callBackExecutor wait time is 0
                 callBackExecutor.awaitTermination(0, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                log.error(e);
-            }
-            workExecutor.shutdown();
+			} catch (InterruptedException e) {
+				log.error(e);
+			}
+			workExecutor.shutdown();
             callBackExecutor.shutdown();
-            if (closeHander != null) {
-                closeHander.setAsynWorkQueue(workQueue);
-                closeHander.setCallBackQueue(callBackQueue);
-                closeHander.process();
-            }
-        }
-    }
+			if (serviceHandler != null) {
+				serviceHandler.setAsynWorkQueue(workQueue);
+				serviceHandler.setCallBackQueue(callBackQueue);
+				serviceHandler.setServiceStat(AsynService.SERVICE_CLOSE);
+				serviceHandler.process();
+			}
+		}
+	}
+
 
     @Override
     public void addWork(Object tagerObject, String method) {
@@ -363,14 +373,16 @@ public class AsynServiceImpl implements AsynService {
         this.workQueueFullHandler.setAsynService(this);
     }
 
+
     @Override
-    public void setCloseHander(AsynServiceCloseHandler closeHander) {
-        if (run)
-            throw new IllegalArgumentException("asyn running");
-        if (closeHander == null)
-            throw new IllegalArgumentException("closeHander is null");
-        this.closeHander = closeHander;
-    }
+	public void setServiceHandler(AsynServiceHandler serviceHandler) {
+		if (run)
+			throw new IllegalArgumentException("asyn running");
+		if (serviceHandler == null)
+			throw new IllegalArgumentException("closeHander is null");
+		this.serviceHandler = serviceHandler;
+	}
+
 
     @Override
     public void setErrorAsynWorkHandler(ErrorAsynWorkHandler errorAsynWorkHandler) {

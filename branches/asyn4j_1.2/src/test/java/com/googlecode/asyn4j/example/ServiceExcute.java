@@ -16,7 +16,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.core.handler.CacheAsynWorkHandler;
-import com.googlecode.asyn4j.core.handler.DefauleCloseHandler;
+import com.googlecode.asyn4j.core.handler.DefauleAsynServiceHandler;
 import com.googlecode.asyn4j.core.handler.DefaultErrorAsynWorkHandler;
 
 import com.googlecode.asyn4j.service.AsynService;
@@ -29,17 +29,17 @@ public class ServiceExcute {
 
     @Before
     public void setUp() {
-      //context = new FileSystemXmlApplicationContext("D:/java/asyn4j_1.2/src/main/java/applicationContext.xml");
+       // context = new FileSystemXmlApplicationContext("D:/java/asyn4j_1.1/src/main/java/applicationContext.xml");
     }
 
     @Test
     public void testExecut2() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
-        anycService.setCloseHander(new DefauleCloseHandler());
+        anycService.setServiceHandler(new DefauleAsynServiceHandler());
         anycService.init();
         TestBean aa = new TestBean();
-        for (long i = 0; i < 700000; i++) {
+        for (long i = 0; i < 700; i++) {
             anycService.addWork(aa, "myName",new Object[] { "panxiuyan" + i },new MyResult());
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());
@@ -70,20 +70,19 @@ public class ServiceExcute {
     }
 
     @Test
-    @Ignore
-    public void testCloseHandler() throws InterruptedException {
+    public void testServiceHandler() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
-        anycService.setCloseHander(new DefauleCloseHandler());
+        anycService.setServiceHandler(new DefauleAsynServiceHandler());
         anycService.init();
-        for (long i = 0; i < 1000; i++) {
-            anycService.addWork( TestBean.class, "myName",new Object[] { "panxiuyan" + i },new MyResult());
+        for (long i = 0; i < 100000; i++) {
+            anycService.addWork( TestBean.class, "myName",new Object[] { "panxiuyan" + i });
 
             if (i % 99 == 0) {
                 System.out.println(anycService.getRunStatInfo());
             }
             
-            if(i==500){
+            if(i==100){
                 System.exit(1);
             }
         }
@@ -95,7 +94,7 @@ public class ServiceExcute {
     public void testErrorHandler() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
-        anycService.setCloseHander(new DefauleCloseHandler());
+        anycService.setServiceHandler(new DefauleAsynServiceHandler());
         anycService.setErrorAsynWorkHandler(new DefaultErrorAsynWorkHandler());
         anycService.init();
         for (long i = 0; i < 100000000; i++) {
