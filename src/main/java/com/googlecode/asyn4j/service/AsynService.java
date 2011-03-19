@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.googlecode.asyn4j.core.WorkWeight;
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
-import com.googlecode.asyn4j.core.handler.AsynServiceCloseHandler;
+import com.googlecode.asyn4j.core.handler.AsynServiceHandler;
 import com.googlecode.asyn4j.core.handler.ErrorAsynWorkHandler;
 import com.googlecode.asyn4j.core.handler.WorkQueueFullHandler;
 import com.googlecode.asyn4j.core.work.AsynWork;
@@ -15,8 +15,18 @@ import com.googlecode.asyn4j.core.work.AsynWork;
  * @author pan_java
  */
 public interface AsynService {
+	
+	
+	/**
+	 * 服务启动
+	 */
+	public final static int SERVICE_INIT = 0;
+	
+	/**
+	 * 服务关闭状态
+	 */
+	public final static int SERVICE_CLOSE = 1;
     
-     
     /**
      * 
      * @param params
@@ -131,7 +141,7 @@ public interface AsynService {
      * 
      * @param closeHander
      */
-    public void setCloseHander(AsynServiceCloseHandler closeHander);
+    public void setServiceHandler(AsynServiceHandler serviceHandler);
 
     /**
      * set error asyn work handler

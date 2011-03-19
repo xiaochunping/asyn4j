@@ -6,7 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.FactoryBean;
 
-import com.googlecode.asyn4j.core.handler.AsynServiceCloseHandler;
+import com.googlecode.asyn4j.core.handler.AsynServiceHandler;
 import com.googlecode.asyn4j.core.handler.ErrorAsynWorkHandler;
 import com.googlecode.asyn4j.core.handler.WorkQueueFullHandler;
 import com.googlecode.asyn4j.service.AsynService;
@@ -37,7 +37,7 @@ public class AsynServiceFactoryBean implements FactoryBean {
 
     private ErrorAsynWorkHandler    errorAsynWorkHandler;
 
-    private AsynServiceCloseHandler asynServiceCloseHandler;
+    private AsynServiceHandler asynServiceCloseHandler;
 
     public void setMaxCacheWork(int maxCacheWork) {
         this.maxCacheWork = maxCacheWork;
@@ -75,11 +75,11 @@ public class AsynServiceFactoryBean implements FactoryBean {
         this.errorAsynWorkHandler = errorAsynWorkHandler;
     }
 
-    public AsynServiceCloseHandler getAsynServiceCloseHandler() {
+    public AsynServiceHandler getAsynServiceCloseHandler() {
         return asynServiceCloseHandler;
     }
 
-    public void setAsynServiceCloseHandler(AsynServiceCloseHandler asynServiceCloseHandler) {
+    public void setAsynServiceCloseHandler(AsynServiceHandler asynServiceCloseHandler) {
         this.asynServiceCloseHandler = asynServiceCloseHandler;
     }
 
@@ -95,7 +95,7 @@ public class AsynServiceFactoryBean implements FactoryBean {
             asynService.setErrorAsynWorkHandler(errorAsynWorkHandler);
         }
         if (asynServiceCloseHandler != null) {
-            asynService.setCloseHander(asynServiceCloseHandler);
+            asynService.setServiceHandler(asynServiceCloseHandler);
         }
         asynService.init();
         return asynService;
