@@ -18,12 +18,12 @@ public interface AsynService {
 	
 	
 	/**
-	 * 服务启动
+	 * service init status
 	 */
 	public final static int SERVICE_INIT = 0;
 	
 	/**
-	 * 服务关闭状态
+	 * service close status
 	 */
 	public final static int SERVICE_CLOSE = 1;
     
