@@ -34,6 +34,12 @@ import com.googlecode.asyn4j.core.work.AsynWorkRejectedExecutionHandler;
 import com.googlecode.asyn4j.exception.Asyn4jException;
 import com.googlecode.asyn4j.spring.AsynSpringUtil;
 
+/***
+ * 
+ * @author pan_java
+ *
+ */
+
 @SuppressWarnings("unchecked")
 public class AsynServiceImpl implements AsynService {
 
@@ -115,9 +121,14 @@ public class AsynServiceImpl implements AsynService {
     }
 
     public static AsynServiceImpl getService() {
-        if (instance == null) {
+    	lock.lock();
+    	try{
+           if (instance == null) {
             instance = new AsynServiceImpl();
-        }
+           }
+    	}finally{
+    		lock.unlock();
+    	}
         return instance;
     }
 
