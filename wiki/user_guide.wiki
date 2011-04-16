@@ -3,6 +3,7 @@
   # 设置异步工作超时设置
   # 使用信号量设置最大工作队列
   # 优化用户接口
+  # 新增初始化方法
 
 
 
@@ -121,12 +122,12 @@ AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100,
 
    自定义处理器 继承 WorkQueueFullHandler 抽象类
 
-   ====3.2服务关闭处理器 --(当服务关闭时工作队列中的工作处理器)====
+   ====3.2服务启动和关闭处理器 --(当服务启动和关闭调用)====
       {{{
-      anycService.setCloseHander(new DefauleCloseHandler());
+      anycService.setCloseHander(new DefauleAsynServiceHandler());
       }}}
 
-   自定义处理器 继承  AsynServiceCloseHandler 抽象类
+   自定义处理器 继承  AsynServiceHandler 抽象类
 
    ====3.3异步工作执行异常处理器 --(当工作执行出现异常时处理器)====
     {{{
