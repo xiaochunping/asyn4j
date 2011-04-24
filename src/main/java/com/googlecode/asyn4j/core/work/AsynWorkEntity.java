@@ -1,5 +1,6 @@
 package com.googlecode.asyn4j.core.work;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,7 +12,7 @@ import com.googlecode.asyn4j.util.MethodUtil;
 /**
  * @author pan_java
  */
-public class AsynWorkEntity implements AsynWork {
+public class AsynWorkEntity implements AsynWork,Serializable {
 
     private Object                           target;
 

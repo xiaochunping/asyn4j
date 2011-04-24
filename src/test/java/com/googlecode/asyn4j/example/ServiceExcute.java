@@ -16,7 +16,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
 import com.googlecode.asyn4j.core.handler.CacheAsynWorkHandler;
-import com.googlecode.asyn4j.core.handler.DefauleAsynServiceHandler;
+import com.googlecode.asyn4j.core.handler.FileAsynServiceHandler;
 import com.googlecode.asyn4j.core.handler.DefaultErrorAsynWorkHandler;
 
 import com.googlecode.asyn4j.service.AsynService;
@@ -36,7 +36,7 @@ public class ServiceExcute {
     public void testExecut2() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
-        anycService.setServiceHandler(new DefauleAsynServiceHandler());
+        anycService.setServiceHandler(new FileAsynServiceHandler());
         anycService.init();
         TestBean aa = new TestBean();
         for (long i = 0; i < 700; i++) {
@@ -71,11 +71,11 @@ public class ServiceExcute {
 
     @Test
     public void testServiceHandler() throws InterruptedException {
-        AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
+        AsynService anycService = AsynServiceImpl.getService(10000, 3000L, 50, 50,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
-        anycService.setServiceHandler(new DefauleAsynServiceHandler());
+        anycService.setServiceHandler(new FileAsynServiceHandler());
         anycService.init();
-        for (long i = 0; i < 100000; i++) {
+        /*for (long i = 0; i < 100000; i++) {
             anycService.addWork( TestBean.class, "myName",new Object[] { "panxiuyan" + i });
 
             if (i % 99 == 0) {
@@ -83,9 +83,22 @@ public class ServiceExcute {
             }
             
             if(i==100){
-                System.exit(1);
+            	Runnable ab = new Runnable(){
+            		public void run(){
+            			try {
+							Thread.sleep(3*1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+            			System.exit(1);
+            		}
+            	};
+            	
+            	Thread t = new Thread(ab);
+            	t.start();
             }
-        }
+        }*/
 
     }
 
@@ -94,7 +107,7 @@ public class ServiceExcute {
     public void testErrorHandler() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
-        anycService.setServiceHandler(new DefauleAsynServiceHandler());
+        anycService.setServiceHandler(new FileAsynServiceHandler());
         anycService.setErrorAsynWorkHandler(new DefaultErrorAsynWorkHandler());
         anycService.init();
         for (long i = 0; i < 100000000; i++) {

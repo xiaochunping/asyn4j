@@ -1,5 +1,7 @@
 package com.googlecode.asyn4j.core.work;
 
+import java.io.Serializable;
+
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
 
 /**
@@ -7,7 +9,7 @@ import com.googlecode.asyn4j.core.callback.AsynCallBack;
  * @author pan_java
  *
  */
-public interface AsynWork {
+public interface AsynWork extends Serializable{
 	
 	/**
 	 * get asyn work callbakck

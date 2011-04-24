@@ -20,6 +20,8 @@ public abstract class AsynServiceHandler implements AsynHandler{
     protected BlockingQueue<Runnable>     asynWorkQueue;
 
     protected BlockingQueue<Runnable> callBackQueue;
+    
+    protected AsynService asynService;
 
     public void setAsynWorkQueue(BlockingQueue<Runnable> asynWorkQueue) {
         this.asynWorkQueue = asynWorkQueue;
@@ -31,6 +33,10 @@ public abstract class AsynServiceHandler implements AsynHandler{
     
     public void setServiceStat(int serviceStat) {
 		this.serviceStat = serviceStat;
+	}
+    
+    public void setAsynService(AsynService asynService) {
+		this.asynService = asynService;
 	}
 
 	/***

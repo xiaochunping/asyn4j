@@ -176,6 +176,7 @@ public class AsynServiceImpl implements AsynService {
 			
 			if(serviceHandler!=null){
 				serviceHandler.setServiceStat(AsynService.SERVICE_INIT);
+				serviceHandler.setAsynService(this);
 				serviceHandler.process();
 			}
             
@@ -344,7 +345,7 @@ public class AsynServiceImpl implements AsynService {
                 totalWork.incrementAndGet();
             } else {
                 log.warn("work queue is full,add work to cache queue");
-               workQueueFullHandler.addAsynWork(asynWork);
+                workQueueFullHandler.addAsynWork(asynWork);
             }
         } catch (InterruptedException e) {
             log.error(e);
