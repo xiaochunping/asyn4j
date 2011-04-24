@@ -18,16 +18,11 @@ import com.googlecode.asyn4j.core.work.AsynWork;
 public final class WorkProcessor implements Serializable,Runnable ,Comparable<WorkProcessor>{
     private static final Log     log = LogFactory.getLog(WorkProcessor.class);
     private AsynWork             asynWork;
-    private ErrorAsynWorkHandler errorAsynWorkHandler;
-    private ExecutorService      callBackExecutor;
-    private Semaphore semaphore;
+    private ApplicationContext applicationContext;
 
-    public WorkProcessor(AsynWork asynWork, ErrorAsynWorkHandler errorAsynWorkHandler,
-                         final ExecutorService callBackExecutor,Semaphore semaphore) {
+    public WorkProcessor(AsynWork asynWork,ApplicationContext applicationContext) {
         this.asynWork = asynWork;
-        this.errorAsynWorkHandler = errorAsynWorkHandler;
-        this.callBackExecutor = callBackExecutor;
-        this.semaphore = semaphore;
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -42,16 +37,16 @@ public final class WorkProcessor implements Serializable,Runnable ,Comparable<Wo
             result = asynWork.call();
             
             if (result != null) {//execute callback
-                callBackExecutor.execute(result);
+            	applicationContext.getCallBackExecutor().execute(result);
             }
             
         } catch (Throwable throwable ) {
             //if execute asyn work is error,errorAsynWorkHandler disposal
-            if (errorAsynWorkHandler != null) {
-                errorAsynWorkHandler.addErrorWork(asynWork,throwable);
+            if (applicationContext.getErrorAsynWorkHandler() != null) {
+            	applicationContext.getErrorAsynWorkHandler().addErrorWork(asynWork,throwable);
             }
         }finally{
-                semaphore.release();
+        	applicationContext.getSemaphore().release();
         }
         
 

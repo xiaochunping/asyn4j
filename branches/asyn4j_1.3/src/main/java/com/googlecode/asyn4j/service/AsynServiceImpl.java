@@ -17,6 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.googlecode.asyn4j.core.ApplicationContext;
 import com.googlecode.asyn4j.core.WorkProcessor;
 import com.googlecode.asyn4j.core.WorkWeight;
 import com.googlecode.asyn4j.core.callback.AsynCallBack;
@@ -41,70 +42,17 @@ import com.googlecode.asyn4j.spring.AsynSpringUtil;
  */
 
 @SuppressWarnings("unchecked")
-public class AsynServiceImpl implements AsynService {
-
-    private static Log                                    log                  = LogFactory
-                                                                                       .getLog(AsynServiceImpl.class);
-
-    // asyn work default work weight
-    private static final WorkWeight                       DEFAULT_WORK_WEIGHT  = WorkWeight.MIDDLE;
-
-    private final static int                              CPU_NUMBER           = Runtime.getRuntime()
-                                                                                       .availableProcessors();
-
-    private static ExecutorService                        workExecutor         = null;
-
-    private static ExecutorService                        callBackExecutor     = null;
-
+public class AsynServiceImpl extends ApplicationContext implements AsynService {
+    private static final Log                                    log                  = LogFactory.getLog(AsynServiceImpl.class);
     // service run flag
     private static boolean                                run                  = false;
-
-    // call back block queue
-    private static BlockingQueue<Runnable>                callBackQueue        = null;
-
-    // work queue
-    protected static BlockingQueue<Runnable>              workQueue            = null;
-
-    // status map
-    private static Map<String, Long>                      statMap              = new HashMap<String, Long>(3);
-
     // status info stringbuffer
     private static StringBuilder                          infoSb               = new StringBuilder();
-
-    private WorkQueueFullHandler                          workQueueFullHandler = null;
-
-	private AsynServiceHandler serviceHandler = null;
-	private ErrorAsynWorkHandler errorAsynWorkHandler = null;
-
-
-    // default work queue cache size
-    private static int                                    maxCacheWork         = 300;
-
-    // default add work wait time
-    private static long                                   addWorkWaitTime      = 0L;
-
-    // work thread pool size
-    private static int                                    work_thread_num      = (CPU_NUMBER / 2) + 1;
-
-    // callback thread pool size
-    private static int                                    callback_thread_num  = CPU_NUMBER / 2;
-
-    // close service wait time
-    private static long                                   closeServiceWaitTime = 2 * 60 * 1000;
-
-    private static AsynServiceImpl                        instance             = null;
-
-    private final static AtomicLong                       totalWork            = new AtomicLong(0);
-
-    private final static AtomicLong                       executeWorkNum       = new AtomicLong(0);
-
-    private final static AtomicLong                       callBackNum          = new AtomicLong(0);
 
     public final static ConcurrentHashMap<String, Object> targetCacheMap       = new ConcurrentHashMap<String, Object>();
 
     private static Lock                                   lock                 = new ReentrantLock();
 
-    private Semaphore                                     semaphore            = null;
 
     private AsynServiceImpl() {
         this(maxCacheWork, addWorkWaitTime, work_thread_num, callback_thread_num, closeServiceWaitTime);
@@ -112,12 +60,7 @@ public class AsynServiceImpl implements AsynService {
 
     private AsynServiceImpl(int maxCacheWork, long addWorkWaitTime, int workThreadNum, int callBackThreadNum,
                             long closeServiceWaitTime) {
-        this.maxCacheWork = maxCacheWork;
-        this.addWorkWaitTime = addWorkWaitTime;
-        this.work_thread_num = workThreadNum;
-        this.callback_thread_num = callBackThreadNum;
-        this.closeServiceWaitTime = closeServiceWaitTime;
-        this.semaphore = new Semaphore(maxCacheWork);
+    	super(maxCacheWork,addWorkWaitTime,workThreadNum,callBackThreadNum,closeServiceWaitTime);
     }
 
     public static AsynServiceImpl getService() {
@@ -318,7 +261,7 @@ public class AsynServiceImpl implements AsynService {
 
         AsynWork anycWork = new AsynWorkEntity(bean, method, params, asynCallBack, weight);
 
-       addAsynWork(anycWork);
+        addAsynWork(anycWork);
 
     }
 
@@ -338,8 +281,7 @@ public class AsynServiceImpl implements AsynService {
         try {
             // get acquire wait addWorkWaitTime
             if (semaphore.tryAcquire(addWorkWaitTime, TimeUnit.MILLISECONDS)) {//
-                WorkProcessor workProcessor = new WorkProcessor(asynWork, errorAsynWorkHandler, callBackExecutor,
-                        semaphore);
+                WorkProcessor workProcessor = new WorkProcessor(asynWork,this);
                 // asyn work execute
                 workExecutor.execute(workProcessor);
                 totalWork.incrementAndGet();

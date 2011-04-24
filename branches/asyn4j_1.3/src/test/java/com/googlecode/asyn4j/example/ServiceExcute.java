@@ -103,7 +103,6 @@ public class ServiceExcute {
     }
 
     @Test
-    @Ignore
     public void testErrorHandler() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
