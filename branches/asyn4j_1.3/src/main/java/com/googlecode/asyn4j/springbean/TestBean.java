@@ -3,13 +3,19 @@ package com.googlecode.asyn4j.springbean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestBean {
+public class TestBean implements java.io.Serializable{
 
 	public void test() {
 		System.out.println("test excute");
 	}
 
 	public void myName(String name) {
+		/*try {
+			Thread.sleep(60*1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		System.out.println(name);
 	}
 

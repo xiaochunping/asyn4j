@@ -1,11 +1,13 @@
 package com.googlecode.asyn4j.core.callback;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author pan_java
  *
  */
-public abstract class AsynCallBack implements Runnable {
+public abstract class AsynCallBack implements Runnable,Serializable {
 
 	protected Object methodResult;
 

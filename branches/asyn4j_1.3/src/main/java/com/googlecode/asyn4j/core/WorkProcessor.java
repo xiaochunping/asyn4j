@@ -1,5 +1,6 @@
 package com.googlecode.asyn4j.core;
 
+import java.io.Serializable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
 
@@ -14,7 +15,7 @@ import com.googlecode.asyn4j.core.work.AsynWork;
  * @author pan_java
  */
 
-public final class WorkProcessor implements Runnable ,Comparable<WorkProcessor>{
+public final class WorkProcessor implements Serializable,Runnable ,Comparable<WorkProcessor>{
     private static final Log     log = LogFactory.getLog(WorkProcessor.class);
     private AsynWork             asynWork;
     private ErrorAsynWorkHandler errorAsynWorkHandler;
@@ -39,6 +40,11 @@ public final class WorkProcessor implements Runnable ,Comparable<WorkProcessor>{
         try {
             //asyn work execute
             result = asynWork.call();
+            
+            if (result != null) {//execute callback
+                callBackExecutor.execute(result);
+            }
+            
         } catch (Throwable throwable ) {
             //if execute asyn work is error,errorAsynWorkHandler disposal
             if (errorAsynWorkHandler != null) {
@@ -47,9 +53,7 @@ public final class WorkProcessor implements Runnable ,Comparable<WorkProcessor>{
         }finally{
                 semaphore.release();
         }
-        if (result != null) {//execute callback
-            callBackExecutor.execute(result);
-        }
+        
 
     }
 
