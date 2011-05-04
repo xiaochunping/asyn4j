@@ -84,6 +84,9 @@ public class TargetService {
 		<property name="workQueueFullHandler">
 			<bean class="com.googlecode.asyn4j.core.handler.CacheAsynWorkHandler"/>
 	   </property>
+<property name="asynServiceHandler">
+			<bean class="com.googlecode.asyn4j.core.handler.FileAsynServiceHandler"/>
+	   </property>
    </bean>
 
 
