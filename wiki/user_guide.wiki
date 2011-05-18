@@ -130,14 +130,16 @@ AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100,
 
      FileAsynServiceHandler 是 AsynServiceHandler  的一个例子将任务持久化到文件，当系统启动时加载文件内容到内存，关闭时将未执行的任务持久化到文件。大家可以参考源码将任务持久化到别外的地方（memcached）
 
-    自定义处理器 继承  AsynServiceHandler 抽象类
+    自定义处理器 继承  AsynServiceHandler  抽象类
 
    ====3.3异步工作执行异常处理器 --(当工作执行出现异常时处理器)====
     {{{
     anycService.setErrorAsynWorkHandler(new DefaultErrorAsynWorkHandler());
     }}}
 
-   自定义处理器 继承 ErrorAsynWorkHandler抽象类
+   自定义处理器 继承 ErrorAsynWorkHandler 抽象类
+
+   ====3.4所有处理器为可选配置，建议根据自己的业务继承相关的类实现自己的处理器====
 
 
 ===4.异步工作优级===
