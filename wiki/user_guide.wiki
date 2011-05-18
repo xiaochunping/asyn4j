@@ -314,6 +314,7 @@ asynService spring bean 工厂
 
 ===九.关闭服务===
 
+{{{
    /**
      * 关闭服务等待 waitTime 秒
      * @ wait time
@@ -324,6 +325,7 @@ asynService spring bean 工厂
      * 关闭服务等待1分钟
      */
     public void close();
+}}}
 
 ===十.注意===
 查找异步工作目标方法时,无法区分方法同名的并且参数是继承关系的方法.
