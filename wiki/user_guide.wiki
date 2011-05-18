@@ -15,8 +15,8 @@
 		AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
                 //异步工作缓冲处理器
                 anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
-                //服务关闭处理器
-                anycService.setCloseHander(new DefauleCloseHandler());
+                //服务启动和关闭处理器
+                anycService.setServiceHandler(new FileAsynServiceHandler());
                 //异步工作执行异常处理器
                 anycService.setErrorAsynWorkHandler(new DefaultErrorAsynWorkHandler());
 		// 启动服务
