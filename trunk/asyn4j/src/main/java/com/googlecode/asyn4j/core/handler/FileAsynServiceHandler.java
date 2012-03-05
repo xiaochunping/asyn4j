@@ -31,26 +31,34 @@ import com.googlecode.asyn4j.core.work.AsynWork;
 public class FileAsynServiceHandler extends AsynServiceHandler {
 
     private final static Log log = LogFactory.getLog(FileAsynServiceHandler.class);
+    
+    private String dataFilePath = null;
+    
+    public FileAsynServiceHandler(String dataFilePath){
+    	this.dataFilePath = dataFilePath;
+    }
 
 	@Override
 	public void init() {
 		try {
-			InputStream input =  new FileInputStream(new File("c:\\asynwork.data"));
+			InputStream input =  new FileInputStream(new File(dataFilePath));
 			ObjectInputStream oi = new ObjectInputStream(input);
 			List<AsynWork> asynWorkList = (List<AsynWork>) oi.readObject();
 			
 			for(AsynWork asynWork:asynWorkList){
 				this.asynService.addAsynWork(asynWork);
 			}
-		} catch (Exception e) {
-		    e.printStackTrace();
+		}catch(FileNotFoundException e){
+			log.info("not data file");
+		}catch (Exception e) {
+			log.error(e);
 		}
 	}
 
 	@Override
 	public void destroy(){
 		try {
-			OutputStream out =  new FileOutputStream(new File("c:\\asynwork.data"));
+			OutputStream out =  new FileOutputStream(new File(dataFilePath));
 			ObjectOutputStream oo = new ObjectOutputStream(out);
 			List<AsynWork> list = new ArrayList<AsynWork>();
 			Iterator<Runnable> asynIterator = asynWorkQueue.iterator();
@@ -60,10 +68,10 @@ public class FileAsynServiceHandler extends AsynServiceHandler {
 			}
 			oo.writeObject(list);
 		} catch (Exception e) {
-		    
+			log.error(e);
 		}
-		System.out.println("asyn work have " + asynWorkQueue.size() + " no run!");
-	    System.out.println("call back have " + callBackQueue.size() + " no run!");
+		log.debug("asyn work have " + asynWorkQueue.size() + " no run!");
+		log.debug("call back have " + callBackQueue.size() + " no run!");
     }
     
     
