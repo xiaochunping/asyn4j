@@ -36,7 +36,7 @@ public class ServiceExcute {
     public void testExecut2() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
-        anycService.setServiceHandler(new FileAsynServiceHandler());
+        anycService.setServiceHandler(new FileAsynServiceHandler("c:/asyn.data"));
         anycService.init();
         TestBean aa = new TestBean();
         for (long i = 0; i < 700; i++) {
@@ -73,7 +73,7 @@ public class ServiceExcute {
     public void testServiceHandler() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(10000, 3000L, 50, 50,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
-        anycService.setServiceHandler(new FileAsynServiceHandler());
+        anycService.setServiceHandler(new FileAsynServiceHandler("c:/asyn.data"));
         anycService.init();
         /*for (long i = 0; i < 100000; i++) {
             anycService.addWork( TestBean.class, "myName",new Object[] { "panxiuyan" + i });
@@ -106,7 +106,7 @@ public class ServiceExcute {
     public void testErrorHandler() throws InterruptedException {
         AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100, 100,1000);
         anycService.setWorkQueueFullHandler(new CacheAsynWorkHandler(100));
-        anycService.setServiceHandler(new FileAsynServiceHandler());
+        anycService.setServiceHandler(new FileAsynServiceHandler("c:/asyn.data"));
         anycService.setErrorAsynWorkHandler(new DefaultErrorAsynWorkHandler());
         anycService.init();
         for (long i = 0; i < 100000000; i++) {
