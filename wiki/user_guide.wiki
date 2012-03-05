@@ -125,10 +125,12 @@ AsynService anycService = AsynServiceImpl.getService(300, 3000L, 100,
 
    ====3.2服务启动和关闭处理器 --(当服务启动和关闭调用)====
       {{{
-      anycService.setCloseHander(new FileAsynServiceHandler());
+      anycService.setCloseHander(new FileAsynServiceHandler("c:\asyn4j.data"));
       }}}
 
+     设置c:\asyn4j.data为持久化文件
      FileAsynServiceHandler 是 AsynServiceHandler  的一个例子将任务持久化到文件，当系统启动时加载文件内容到内存，关闭时将未执行的任务持久化到文件。大家可以参考源码将任务持久化到别外的地方（memcached）
+
 
     自定义处理器 继承  AsynServiceHandler  抽象类
 
