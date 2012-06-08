@@ -54,16 +54,16 @@ public class AsynServiceImpl extends ApplicationContext implements AsynService {
     private static Lock                                   lock                 = new ReentrantLock();
 
 
-    private AsynServiceImpl() {
+    protected  AsynServiceImpl() {
         this(maxCacheWork, addWorkWaitTime, work_thread_num, callback_thread_num, closeServiceWaitTime);
     }
 
-    private AsynServiceImpl(int maxCacheWork, long addWorkWaitTime, int workThreadNum, int callBackThreadNum,
+    protected  AsynServiceImpl(int maxCacheWork, long addWorkWaitTime, int workThreadNum, int callBackThreadNum,
                             long closeServiceWaitTime) {
     	super(maxCacheWork,addWorkWaitTime,workThreadNum,callBackThreadNum,closeServiceWaitTime);
     }
 
-    public static AsynServiceImpl getService() {
+    public static AsynService getService() {
     	lock.lock();
     	try{
            if (instance == null) {
@@ -75,7 +75,7 @@ public class AsynServiceImpl extends ApplicationContext implements AsynService {
         return instance;
     }
 
-    public static AsynServiceImpl getService(int maxCacheWork, long addWorkWaitTime, int workThreadNum,
+    public static AsynService getService(int maxCacheWork, long addWorkWaitTime, int workThreadNum,
                                              int callBackThreadNum, long closeServiceWaitTime) {
         lock.lock();
         try {

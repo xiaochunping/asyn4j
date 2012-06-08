@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.googlecode.asyn4j.core.handler.AsynServiceHandler;
 import com.googlecode.asyn4j.core.handler.ErrorAsynWorkHandler;
 import com.googlecode.asyn4j.core.handler.WorkQueueFullHandler;
+import com.googlecode.asyn4j.service.AsynService;
 import com.googlecode.asyn4j.service.AsynServiceImpl;
 
 
@@ -66,7 +67,7 @@ public class ApplicationContext implements Serializable{
     protected Semaphore                                     semaphore            = null;
 
 
-    protected static AsynServiceImpl                        instance             = null;
+    protected static AsynService                        instance             = null;
 
     protected final static AtomicLong                       totalWork            = new AtomicLong(0);
 
